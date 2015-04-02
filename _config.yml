@@ -1,6 +1,6 @@
 # Dependencies
 markdown:            redcarpet
-highlighter:         pygments
+# highlighter:         pygments
 
 # Permalinks
 #
@@ -10,16 +10,16 @@ relative_permalinks: true
 
 # Setup
 title:               BccSafe's Blog
-tagline:             '为了遇见更好的自己'
+tagline:             'Fight for a future'
 description:         '这里有一个年轻的互联网人，做着一点自己觉得很酷的事情 <a href="mailto:bccsafe5988@gmail.com" target="_blank">@BccSafe</a>'
-url:                 http://lanyon.getpoole.com
+url:                 http://www.bccsafe.com
 baseurl:             /
-paginate:            5
+paginate:            8
 
 # About/contact
 author:
   name:              BccSafe 
-  url:               https://www.baidu.com 
+  url:               https://www.bccsafe.com 
   email:             bccsafe5988@gmail.com 
 
 # Custom vars

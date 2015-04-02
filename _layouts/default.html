@@ -25,9 +25,9 @@
     </div>
 
     <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
     <script>
       (function(document) {
+       alert("s");
         var toggle = document.querySelector('.sidebar-toggle');
         var sidebar = document.querySelector('#sidebar');
         var checkbox = document.querySelector('#sidebar-checkbox');
@@ -40,8 +40,8 @@
              (target === checkbox || target === toggle)) return;
 
           checkbox.checked = false;
-        }, false);
-      })(document);
+        }, false)
+      });
     </script>
   </body>
 </html>

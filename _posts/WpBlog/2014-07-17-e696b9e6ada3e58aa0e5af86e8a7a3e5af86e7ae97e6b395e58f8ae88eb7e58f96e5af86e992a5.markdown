@@ -1,0 +1,182 @@
+---
+author: bccsafe
+comments: true
+date: 2014-07-17 17:22:44+00:00
+layout: post
+slug: '%e6%96%b9%e6%ad%a3%e5%8a%a0%e5%af%86%e8%a7%a3%e5%af%86%e7%ae%97%e6%b3%95%e5%8f%8a%e8%8e%b7%e5%8f%96%e5%af%86%e9%92%a5'
+title: 正方加密解密算法及获取密钥
+wordpress_id: 569
+categories:
+- wp_Code[Delphi]
+tags:
+- 正方加密解密算法
+---
+
+这学期挂了2门，很是不爽，于是乎重操旧业，话说我已经很久没碰渗透测试这方面的东西了，各种坎坷...具体细节以后再写，拿到系统管理员的密文后，百度他的算法资料，也不用反编译那个zjdx.dll了，网上资料一片一片的
+
+    
+    Public Function jiam(ByVal PlainStr As String, ByVal key As String) As String
+            Dim strChar, KeyChar, NewStr As String
+            Dim Pos As Integer
+            Dim i, intLen As Integer
+            Dim Side1, Side2 As String
+            Pos = 1
+            For i = 1 To Len(PlainStr)
+                strChar = Mid(PlainStr, i, 1)
+                KeyChar = Mid(key, Pos, 1)
+                If ((Asc(strChar) Xor Asc(KeyChar)) < 32) Or ((Asc(strChar) Xor Asc(KeyChar)) > 126) Or (Asc(strChar) < 0) Or (Asc(strChar) > 255) Then
+                    NewStr = NewStr & strChar
+                Else
+                    NewStr = NewStr & Chr(Asc(strChar) Xor Asc(KeyChar))
+                End If
+                If Pos = Len(key) Then Pos = 0
+                Pos = Pos + 1
+            Next
+            If Len(NewStr) Mod 2 = 0 Then
+                Side1 = StrReverse(Left(NewStr, CInt((Len(NewStr) / 2))))
+                Side2 = StrReverse(Right(NewStr, CInt((Len(NewStr) / 2))))
+                NewStr = Side1 & Side2
+            End If
+            jiam = NewStr
+        End Function 
+    
+    public string jiemi(string PlainStr, string key)
+    {
+          string text3;
+          int num2 = 1;
+          if ((Strings.Len(PlainStr) % 2) == 0)
+          {
+                string text4 = Strings.StrReverse(Strings.Left(PlainStr, (int) Math.Round(((double) Strings.Len(PlainStr)) / 2)));
+                string text5 = Strings.StrReverse(Strings.Right(PlainStr, (int) Math.Round(((double) Strings.Len(PlainStr)) / 2)));
+                PlainStr = text4 + text5;
+          }
+          int num3 = Strings.Len(PlainStr);
+          for (int num1 = 1; num1 <= num3; num1++)
+          {
+                string text6 = Strings.Mid(PlainStr, num1, 1);
+                string text2 = Strings.Mid(key, num2, 1);
+                if (((((Strings.Asc(text6) ^ Strings.Asc(text2)) < 0x20) | ((Strings.Asc(text6) ^ Strings.Asc(text2)) > 0x7e)) | (Strings.Asc(text6) < 0)) | (Strings.Asc(text6) > 0xff))
+                {
+                      text3 = text3 + text6;
+                }
+                else
+                {
+                      text3 = text3 + StringType.FromChar(Strings.Chr(Strings.Asc(text6) ^ Strings.Asc(text2)));
+                }
+                if (num2 == Strings.Len(key))
+                {
+                      num2 = 0;
+                }
+                num2++;
+          }
+          return text3;
+    }
+
+
+
+
+奉上delphi版的方正加密解密算法(他的算法很渣，看看就好了)
+
+
+
+``` delphi    
+//uses StrUtils;
+
+function RightCopy(S: string; Index, count: Integer): string;
+begin
+  Result := Copy(S,Length(S)-count+1-(Index-1),count);
+end;
+
+function jiami(PlainStr, key: string): string;
+var
+  StrChar, Keychar: Char;
+  Pos: Integer;
+  i : Integer;
+  StrLeft, StrRight: String;
+begin
+  Pos := 1;
+  for i := 1 to Length(PlainStr) do
+  begin
+    StrChar := copy(PlainStr, i, 1)[1];
+    KeyChar := copy(key, Pos, 1)[1];
+    if ((ord(StrChar) Xor ord(KeyChar)) < 32) Or
+      ((ord(StrChar) Xor ord(KeyChar)) > 126) Or
+      (ord(StrChar) > 255) Then   //ord(StrChar) < 0 永远为false 去掉了
+      Result := Result + StrChar
+    Else
+      Result := Result + Char(ord(StrChar) Xor ord(KeyChar));
+
+    if Pos = Length(key) then Pos := 0;
+    Inc(Pos);
+  end;
+
+  If Length(Result) Mod 2 = 0 Then
+  begin
+    StrLeft := ReverseString(copy(Result, 0, Round(Length(Result) / 2)));
+    StrRight := ReverseString(RightCopy(Result, 1, Round(Length(Result) / 2)));
+    Result := StrLeft + StrRight;
+  end;
+end;
+
+function jiemi(PlainStr, key: string): string;
+var
+  StrLeft, StrRight: string;
+  num2, i : Integer;
+  StrChar, Keychar: Char;
+begin
+  num2 := 1;
+  if Length(PlainStr) mod 2 = 0 then
+  begin
+    StrLeft := ReverseString(copy(PlainStr, 0, Round(Length(PlainStr) / 2)));
+    StrRight := ReverseString(RightCopy(PlainStr, 1,
+      Round(Length(PlainStr) / 2)));
+    PlainStr := StrLeft + StrRight;
+  end;
+
+  for i := 1 to Length(PlainStr) do
+  begin
+    StrChar := copy(PlainStr, i, 1)[1];
+    Keychar := copy(key, num2, 1)[1];
+
+    if (((((ord(StrChar) Xor ord(Keychar)) < 32) Or ((ord(StrChar) Xor ord(Keychar)) >
+      126)) ) Or (ord(StrChar) > 255)) then  //ord(StrChar) < 0 永远为false 去掉了
+      Result := Result + StrChar
+    else
+      Result := Result + Char(ord(StrChar) xor ord(Keychar));
+
+    if num2 = Length(key) then num2 := 0;
+    Inc(num2);
+  end;
+end;
+```
+
+然后问题出现了，我们学校的密钥并不是网上流传的Acxylf365jw，渣渣表示只能继续百度，发现核攻击写了一片关于这个的算法，GET!	根据他写的，改的delphi版的GetKey
+
+``` delphi    
+function GetKey(PlainStr: String; Pass: String): String;
+var
+  StrChar, Keychar: Char;
+  Pos: Integer;
+  i: Integer;
+  StrLeft, StrRight: String;
+begin
+  Pos := 0;
+  If Length(PlainStr) Mod 2 = 0 Then
+  begin
+    StrLeft := ReverseString(copy(PlainStr, 0, Round(Length(PlainStr) / 2)));
+    StrRight := ReverseString(RightCopy(PlainStr, 1, Round(Length(PlainStr) / 2)));
+    PlainStr := StrLeft + StrRight;
+  end;
+  for i := 0 to Length(PlainStr) - 1 do
+  begin
+    StrChar := Copy(PlainStr, i, 1)[1];
+    KeyChar := Copy(Pass, Pos, 1)[1];
+    If StrChar = KeyChar Then
+      Result := Result + '*'
+    else
+      Result := Result + Char(ord(StrChar) Xor ord(KeyChar));
+    Pos := Pos + 1;
+  end;
+end;
+```
+从数据库里找了点数据出来(有些帐号密码就是帐号名)，成功拿到了密钥Encrypt01

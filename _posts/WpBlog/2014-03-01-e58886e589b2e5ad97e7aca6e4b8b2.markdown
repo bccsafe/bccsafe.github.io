@@ -1,0 +1,53 @@
+---
+author: bccsafe
+comments: true
+date: 2014-03-01 07:39:46+00:00
+layout: post
+slug: '%e5%88%86%e5%89%b2%e5%ad%97%e7%ac%a6%e4%b8%b2'
+title: 分割字符串
+wordpress_id: 468
+categories:
+- wp_delphi学习笔记
+---
+
+在D7的时候 我还是自己写一个函数来分割字符串，现在看来太傻了
+
+在D7时就可以靠TStrings来完成分割字符串
+
+``` delphi    
+const
+  MYSTR :String = 'aaa|bbb|ccc|ddd';
+var
+  strs :TStrings;
+  i :Integer;
+begin
+  strs := TStringList.Create;
+  strs.Delimiter := '|';
+  strs.DelimitedText := MYSTR;
+  for i := 0 to Strs.Count-1 do
+    ShowMessage(Strs[i]);
+end;
+```
+
+ 
+
+现在在高版本中更是可以依靠TStringHelper来完成
+
+``` delphi    
+const
+  MYSTR :String = 'aaa|bbb|ccc|ddd';
+var
+  strs :String;
+  Astrs: TArray<string>;
+  i :Integer;
+begin
+  strs:= MYSTR;
+  Astrs:= strs.Split(['|'], ExcludeEmpty);
+  for i := 0 to high(Astrs) do
+    ShowMessage(Astrs[i]);
+end;
+```
+
+ 
+
+Delphi帮助我们封装了很多功能函数 只是不知道罢了

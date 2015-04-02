@@ -1,0 +1,49 @@
+---
+author: bccsafe
+comments: true
+date: 2013-10-30 11:55:02+00:00
+layout: post
+slug: '%e6%a3%80%e6%b5%8b%e8%bf%9c%e7%a8%8b%e6%96%87%e4%bb%b6%e5%ad%98%e5%9c%a8'
+title: 检测远程文件存在
+wordpress_id: 397
+categories:
+- wp_Code[Delphi]
+tags:
+- 远程文件存在
+---
+
+这个函数用于检测远程文件是否存在
+
+
+
+ 注意：参数URL必须带http:// 或者https://
+
+``` delphi    
+uses WinInet;
+
+function CheckUrl(url: string): Boolean;
+var
+  hSession, hfile: hInternet;
+  dwindex, dwcodelen: dword;
+  dwcode: array[1..20] of Char;
+  res: PChar;
+begin
+  Result := false;
+  hSession := InternetOpen('InetURL:/1.0', INTERNET_OPEN_TYPE_PRECONFIG,
+    nil, nil, 0);
+  if Assigned(hsession) then
+  begin
+    hfile := InternetOpenUrl(hsession, PChar(url), nil, 0, INTERNET_FLAG_RELOAD, 0);
+    dwIndex := 0;
+    dwCodeLen := 10;
+    HttpQueryInfo(hfile, HTTP_QUERY_STATUS_CODE, @dwcode, dwcodeLen, dwIndex);
+    res := PChar(@dwcode);
+    Result := (res = '200') or (res = '302'); //200,302未重定位标志
+    if Assigned(hfile) then
+    InternetCloseHandle(hfile);
+    InternetCloseHandle(hsession);
+  end;
+end;
+```
+
+

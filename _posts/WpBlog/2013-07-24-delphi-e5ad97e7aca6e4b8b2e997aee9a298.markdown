@@ -1,0 +1,100 @@
+---
+author: bccsafe
+comments: true
+date: 2013-07-24 03:41:21+00:00
+layout: post
+slug: delphi-%e5%ad%97%e7%ac%a6%e4%b8%b2%e9%97%ae%e9%a2%98
+title: delphi 字符串问题
+wordpress_id: 271
+categories:
+- wp_delphi学习笔记
+tags:
+- delphiXE2字符串
+- 中英文长度
+---
+
+ 
+
+
+delphi里字符串是最混乱的最麻烦的了，现在只讨论高版本中的字符串，如delphi 2009，delphi xe2，3，4，D7的用户还是别看下去了，省得看晕了，先交代下在高版本的D中，一共有3个字符串类型 AnsiString、WideString、UnicodeString，而string默认是UnicodeString，在获取中英文长度时，需要将string改为AnsiString
+
+``` delphi    
+//适用于高版本delphi
+
+procedure test();
+var
+ astr:AnsiString;
+ wstr:wideString;
+ str:string;
+begin
+  astr:='bccsafe';
+  wstr:='bccsafe';
+  str:='bccsafe';
+  showmessage(inttostr(length(astr)));//7
+  showmessage(inttostr(length(wstr)));//7
+  showmessage(inttostr(length(str)));//7
+  //----------------
+  astr:='博客';
+  wstr:='博客';
+  str:='博客';
+  showmessage(inttostr(length(astr)));//4
+  showmessage(inttostr(length(wstr)));//2
+  showmessage(inttostr(length(str)));//2
+end;
+```
+
+ 例子里就很明显了，一个中文字符占两个字节，1个英文字符占1个字节
+
+ 在排版中我们有时候需要长度相同
+
+ 这时候就需要用到Ansistring了
+
+
+
+
+
+最后附上字符串互相转换的函数
+
+
+
+
+>	一、string转为AnsiString
+
+>	1、直接赋值 （有警告）
+
+>	2、AnsiString()类型强制转换。（无警告）
+
+>	二、AnsiString 转为string
+
+>	
+
+>	1、直接赋值 （有警告）
+
+>	2、string()类型强制转换。（无警告）
+ 
+>	三、string 转为Tbytes
+
+>	1、bytes := BytesOf(str) 已转为ansi编码
+
+>	2、bytes := WideBytesOf(str) UNICODE 编码
+
+
+
+>	四、AnsiString 转为Tbytes
+
+>	1、bytes := BytesOf(str) ansi编码
+
+>	2、bytes := WideBytesOf(string(str)) UNICODE 编码
+
+
+
+>	五、Tbytes 转为string
+
+>	1、 str := StringOf(bytes) Tbytes 为ansi编码
+
+>	2、 str := WideStringOf(bytes) Tbytes 为unicode编码</blockquote>
+
+
+
+
+

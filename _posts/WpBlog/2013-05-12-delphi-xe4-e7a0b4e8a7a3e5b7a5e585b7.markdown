@@ -1,0 +1,41 @@
+---
+author: bccsafe
+comments: true
+date: 2013-05-12 15:50:03+00:00
+layout: post
+slug: delphi-xe4-%e7%a0%b4%e8%a7%a3%e5%b7%a5%e5%85%b7
+title: Delphi XE4 破解工具
+wordpress_id: 165
+categories:
+- wp_delphi学习笔记
+post_format:
+- 图像
+tags:
+- Delphi XE4 破解
+---
+
+Delphi XE4 破解工具，Delphi XE4 破解补丁，Delphi XE4 激活工具，Delphi XE4 激活补丁，delphi XE4 完美破解
+
+
+
+CSDN上挖来的
+
+下载地址：[http://pan.baidu.com/share/link?shareid=472903&uk=1982385223](http://pan.baidu.com/s/1gdBYgLX)
+
+
+
+使用说明：
+
+1. 在官方下载xe4 下载地址: http://altd.embarcadero.com/download/radstudio/xe4/delphicbuilder_xe4_win.iso
+
+2. 安装SN:AADA-RKEERA-P8R2D3-M3CS
+
+3. 运行embarcadero.rad.studio.xe4.(rtm)-patch.exe 如果不放在BIN目录里运行要自己找bds.exe程序
+
+4. 运行XE4SlipGen.exe.
+
+
+[![delphi xe4](../../../../../public/Image/2013/05/delphi-xe4.jpg)](../../../../../public/Image/2013/05/delphi-xe4.jpg)
+
+
+

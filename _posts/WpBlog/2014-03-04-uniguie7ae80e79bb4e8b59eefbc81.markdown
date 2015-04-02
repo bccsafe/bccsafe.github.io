@@ -1,0 +1,28 @@
+---
+author: bccsafe
+comments: true
+date: 2014-03-04 15:00:33+00:00
+layout: post
+slug: unigui%e7%ae%80%e7%9b%b4%e8%b5%9e%ef%bc%81
+title: Unigui简直赞！
+wordpress_id: 474
+categories:
+- wp_delphi学习笔记
+tags:
+- Unigui
+---
+
+推荐一款delphi开发网页应用的框架，uniGUI完全基于ExtJS，全面支持Ajax技术，支持D7-XE5
+当前最新版本0.95，1.0版本听说将收费
+
+官网DEMO地址    [http://www.unigui.com/demo](http://www.unigui.com/demo)
+
+[![Unigui](../../../../../public/Image/2014/03/1.jpg)](../../../../../public/Image/2014/03/1.jpg)
+
+接下来将花费比较多的时间去学习这个框架，学习笔记我会分享到Blog上
+
+
+
+
+
+

@@ -1,0 +1,137 @@
+---
+author: bccsafe
+comments: true
+date: 2013-01-06 14:33:11+00:00
+layout: post
+slug: '%e7%b2%be%e7%ae%80%e5%9c%b0%e5%8a%a8%e6%80%81%e8%b0%83%e7%94%a8%e5%87%bd%e6%95%b0'
+title: 精简地动态调用函数
+wordpress_id: 111
+categories:
+- wp_delphi学习笔记
+tags:
+- 一行代码动态调用函数
+---
+
+
+
+**delphi中调用外部函数无非2种 静态调用和动态调用**
+
+**静态调用在这里不讲了，没什么花头**
+
+**动态调用也就是先用LoadLibrary获取动态连接库的句柄，再通过GetProcAddress来获取指定的动态连接库函数的地址**
+
+**这个不懂的话 请移步   [解析Delphi中的LoadLibrary,GetProcAddress,FreeLibrary](http://blog.csdn.net/aroc_lo/article/details/4878823)   恶补下**
+
+**动态加载MessageBox，例子如下：**
+
+
+
+``` delphi    
+type
+  TMessageBox=function(hWnd: HWND; lpText, lpCaption: PChar; uType: UINT): Integer; stdcall;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  Mymsg:TMessageBox;
+  handle:Thandle;
+begin
+  Handle:=LoadLibrary('user32.dll');//获得DLL的句柄
+  if Handle <> 0 then //获取成功
+  begin
+    Mymsg:= GetProcAddress(Handle, 'MessageBoxA');//获得DLL中MessageBoxA例程的地址
+    if Assigned(Mymsg) then//获取成功
+      Mymsg(0, 'hello world', 'title', MB_OK); //调用函数
+    FreeLibrary(Handle);//释放资源
+  end;
+end;
+```
+
+**这样我们就完成了一次动态加载，但是当我们的程序中需要频繁的加载我们的自定义函数时，这样的代码过于臃肿**
+
+**当然我们可以把这设计得更漂亮一些，如下所示**
+
+
+
+``` delphi    
+type
+  TMessageBox=function(hWnd: HWND; lpText, lpCaption: PChar; uType: UINT): Integer; stdcall;
+
+function LoadDll(DllName:string;var ProcAdr:pointer; FunctionName:string):boolean;
+var
+ Dllhandle:Thandle;
+begin
+  if Assigned(ProcAdr) then begin result:=true; exit; end;
+  result:=false;
+  DllHandle:=LoadLibrary(pchar(DllName));
+  if DllHandle = 0 then exit;
+  ProcAdr:=GetProcAddress(DllHandle,pchar(FunctionName));
+  FreeLibrary(Dllhandle);
+  result:= Assigned(ProcAdr);
+end;
+
+//调用方式 if LoadDll('user32.dll',@Mymsg,'MessageBoxA') then Mymsg(0, 'hello world', 'title', MB_OK);
+```
+
+
+**这样每次加载时只需要一行代码即可解决**
+
+**但是问题仍然存在，调用N个自定义函数 我们就要声明N个 **
+
+**如果还是嫌太烦 那就使用接下来的方法(PS:这函数抄来的...咱水平不够 还要内嵌ASM)**
+
+
+
+``` delphi    
+{
+   dllname:     DLL名称
+   funcname:     函数名称
+   param:       参数
+}
+function CallFunc(dllname, funcname: string; const param: array of const): DWORD;
+var
+   hLib: THandle;
+   pFunc: Pointer;
+   intSize: Integer;
+begin
+   Result := 0;
+   hLib := LoadLibrary(PChar(dllname));
+   if hLib <> 0 then
+   begin
+     pFunc := GetProcAddress(hLib, PChar(funcname));
+     if pFunc <> nil then
+     begin
+       // 获取参数大小
+       intSize := Length(param);
+       // 以下汇编码将自动完成函数调用
+       asm
+         push ecx
+         push esi
+         mov ecx, intSize;   // 参数的个数
+         mov esi, param
+         test ecx, ecx       // 判断是否有参数
+         je @call             // 如果没有参数则跳转到函数调用处
+       @again:
+         dec ecx
+         push dword ptr [esi + ecx * 8]   // 循环把参数压入堆栈
+         cmp ecx, 0
+         jnz @again           // 一直循环到 ecx 为0
+       @call:
+         call pFunc           // 调用函数
+         mov @Result, eax     // 返回值
+         pop esi
+         pop ecx
+       end;
+     end;
+     FreeLibrary(hLib);
+   end;
+end;
+
+//CallFunc('user32.dll', 'MessageBoxA', [0, 'hello world', 'title', MB_OK]);
+```
+
+
+**这样一来 调用自定义函数只需要一行代码 也不需要声明太多的函数 很精简！**
+
+**有什么说的不对的、不完美的地方 欢迎各位大牛指正~~**
+
+

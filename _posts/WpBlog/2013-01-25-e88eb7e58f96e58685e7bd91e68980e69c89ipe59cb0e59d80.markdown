@@ -1,0 +1,79 @@
+---
+author: bccsafe
+comments: true
+date: 2013-01-25 03:30:46+00:00
+layout: post
+slug: '%e8%8e%b7%e5%8f%96%e5%86%85%e7%bd%91%e6%89%80%e6%9c%89ip%e5%9c%b0%e5%9d%80'
+title: 获取内网所有IP地址
+wordpress_id: 126
+categories:
+- wp_Code[Delphi]
+tags:
+- 获取内网IP
+---
+``` delphi
+Const
+    MAX_ADAPTER_NAME_LENGTH        = 256;
+    MAX_ADAPTER_DESCRIPTION_LENGTH = 128;
+    MAX_ADAPTER_ADDRESS_LENGTH     = 8;
+
+Type
+TIPAddressString = Array[0..4*4-1] of Char;
+PIPAddrString = ^TIPAddrString;
+TIPAddrString = Record
+    Next      : PIPAddrString;
+    IPAddress : TIPAddressString;
+    IPMask    : TIPAddressString;
+    Context   : Integer;
+End;
+
+PIPAdapterInfo = ^TIPAdapterInfo;
+TIPAdapterInfo = Record { IP_ADAPTER_INFO }
+    Next                : PIPAdapterInfo;
+    ComboIndex          : Integer;
+    AdapterName         : Array[0..MAX_ADAPTER_NAME_LENGTH+3] of Char;
+    Description         : Array[0..MAX_ADAPTER_DESCRIPTION_LENGTH+3] of Char;
+    AddressLength       : Integer;
+    Address             : Array[1..MAX_ADAPTER_ADDRESS_LENGTH] of Byte;
+    Index               : Integer;
+    _Type               : Integer;
+    DHCPEnabled         : Integer;
+    CurrentIPAddress    : PIPAddrString;
+    IPAddressList       : TIPAddrString;
+    GatewayList         : TIPAddrString;
+End;
+
+ Function GetAdaptersInfo(AI : PIPAdapterInfo; Var BufLen : Integer) : Integer; StdCall; External 'iphlpapi.dll' Name 'GetAdaptersInfo';
+
+function GetLocalIP():string;
+  Function GetAddrString(Addr : PIPAddrString) : String;
+  Begin
+      Result := '';  
+      While (Addr <> nil) do Begin
+        Result := Result+Addr^.IPAddress+#13;
+        Addr := Addr^.Next;
+      End;
+  End;
+var
+  AI,Work : PIPAdapterInfo;
+  Size    : Integer;
+  Res     : Integer;
+  temps   :string;
+begin
+ Size := 5120;
+ GetMem(AI,Size);
+ work:=ai;
+ Res := GetAdaptersInfo(AI,Size);
+ If (Res <> ERROR_SUCCESS) Then halt;
+ repeat
+    temps:=GetAddrString(@Work^.IPAddressList);
+    if temps <> '0.0.0.0'+#13 then result:=result+temps+'/';
+    work:=work^.Next ;
+ until (work=nil);
+ if copy(result,length(result),length(result)-1) = '/' then delete(result,length(result),length(result)-1);
+end;
+
+//showmessage(GetLocalIP);
+```
+
+

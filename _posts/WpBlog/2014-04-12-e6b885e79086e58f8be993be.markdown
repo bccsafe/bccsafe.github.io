@@ -1,0 +1,23 @@
+---
+author: bccsafe
+comments: true
+date: 2014-04-12 09:13:33+00:00
+layout: post
+slug: '%e6%b8%85%e7%90%86%e5%8f%8b%e9%93%be'
+title: 清理友链
+wordpress_id: 498
+categories:
+- wp_其他
+---
+
+好久没有管友情链接了
+
+去掉友链的原因基本两点
+
+大部分是Blog关掉了
+
+个别Blog我没有找到有我Blog的链接
+
+ 
+
+如果我误删了，请联系我重新加上。

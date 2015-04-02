@@ -1,0 +1,20 @@
+---
+author: bccsafe
+comments: true
+date: 2014-10-14 10:32:18+00:00
+layout: post
+slug: 64%e4%bd%8d%e4%b8%8b%e6%93%8d%e4%bd%9c%e6%b3%a8%e5%86%8c%e8%a1%a8
+title: 64位下操作注册表
+wordpress_id: 634
+categories:
+- wp_delphi学习笔记
+---
+
+以前都没怎么注意这个，真正开发碰到时才发现，windows为了将32位程序和64位程序分离开，对文件和[注册表](http://www.bitscn.com/windows/regedit/)采用了重定向，导致有时候无法读取到注册表的值
+
+解决方法：
+
+	Reg := TRegistry.Create(KEY_WRITE OR KEY_READ or KEY_WOW64_64KEY);
+
+
+具体请看  [http://blog.csdn.net/xiexuan2007/article/details/38416123](http://blog.csdn.net/xiexuan2007/article/details/38416123)

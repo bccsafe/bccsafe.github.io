@@ -1,0 +1,89 @@
+---
+author: bccsafe
+comments: true
+date: 2012-10-02 07:16:06+00:00
+layout: post
+slug: delphi-%e5%ae%9e%e7%8e%b0%e7%9e%ac%e9%97%b4%e5%85%b3%e6%9c%ba
+title: ZwShutdownSystem实现瞬间关机
+wordpress_id: 7
+categories:
+- wp_delphi学习笔记
+tags:
+- ZwShutdownSystem
+- 瞬间关机
+---
+
+不使用常规的ExitWindowsEx方法，而采用微软未公开的API，可以实现瞬间关机，并不会拖拖拉拉，如同切断电源一般
+
+``` delphi    
+function ShutDownPC:boolean;
+type
+  TRtlAdjustPrivilege=function (Privilege: ULONG; Enable: BOOLEAN;CurrentThread: BOOLEAN; Enabled: PBOOLEAN): DWORD; stdcall;
+  TZwShutdownSystem  =function (arg: DWORD): BOOLEAN; stdcall;
+var
+  DllHandle:Thandle;
+  RtlAdjustPrivilege:TRtlAdjustPrivilege;
+  ZwShutdownSystem:TZwShutdownSystem;
+begin
+  result:=false;
+  DllHandle:=LoadLibrary(pchar('ntdll.dll'));
+  if DllHandle = 0 then Exit;
+  @RtlAdjustPrivilege:=GetProcAddress(DllHandle,'RtlAdjustPrivilege');
+  @ZwShutdownSystem  :=GetProcAddress(DllHandle,'ZwShutdownSystem');
+  if not Assigned(@RtlAdjustPrivilege) then Exit;
+  asm
+    PUSH ESP
+    PUSH 0
+    PUSH 1
+    PUSH $13
+    CALL RtlAdjustPrivilege
+    PUSH 0
+    CALL ZwShutdownSystem
+  end;
+end;  
+``` 
+</br>
+####补充API解释 
+
+
+>	ZwShutdownSystem这个函数封装在NtDll.dll中（在所有DLL加载之前加载），被微软严格保密，就是说你在MSDN上查不到关于他的任何信息。
+
+>	常量 SE_BACKUP_PRIVILEGE, "17", 公开
+>	常量 SE_RESTORE_PRIVILEGE, "18", 公开
+
+>	常量 SE_SHUTDOWN_PRIVILEGE, "19", 公开
+
+>	常量 SE_DEBUG_PRIVILEGE, "20", 公开
+>	先来看看这个函数的定义(Winehq给出)：
+
+>	NTSTATUS RtlAdjustPrivilege
+
+>	(
+
+>	ULONG Privilege,
+
+>	BOOLEAN Enable,
+
+>	BOOLEAN CurrentThread,
+
+>	PBOOLEAN Enabled
+
+>	)
+
+>	参数的含义：
+
+>	Privilege [In] Privilege index to change.  
+
+>	// 所需要的权限名称，可以到MSDN查找关于Process Token & Privilege内容可以查到
+
+>	Enable [In] If TRUE, then enable the privilege otherwise disable. 
+
+>	// 如果为True 就是打开相应权限，如果为False 则是关闭相应权限
+
+>	CurrentThread [In] If TRUE, then enable in calling thread, otherwise process. 
+
+>	// 如果为True 则仅提升当前线程权限，否则提升整个进程的权限
+
+>	Enabled [Out] Whether privilege was previously enabled or disabled.
+
+>	// 输出原来相应权限的状态（打开 | 关闭）</blockquote>

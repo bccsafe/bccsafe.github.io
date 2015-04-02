@@ -1,0 +1,39 @@
+---
+author: bccsafe
+comments: true
+date: 2013-10-26 16:23:43+00:00
+layout: post
+slug: '%e8%8e%b7%e5%8f%96%e5%ad%97%e7%ac%a6%e4%b8%b2%e9%95%bf%e5%ba%a6%e5%83%8f%e7%b4%a0'
+title: 获取字符串长度(像素)
+wordpress_id: 393
+categories:
+- wp_Code[Delphi]
+tags:
+- 获取字符串长度
+---
+
+
+
+实际开发时有时会用到
+
+网上找了下，倒是给我找到了 
+
+虽然实现的方法不是很好，但是能达到效果就好
+
+``` delphi 
+function GetTextWidthInPixel(Sender:TObject;DisplayText:String):Integer;
+var
+  vLabel:TLabel;
+begin
+  vLabel:=TLabel.Create(nil);
+  vLabel.Parent:=(Sender as TWinControl);
+  with vLabel do
+  begin
+    Caption:=DisplayText;
+    Result:=Canvas.TextWidth(String(DisplayText));
+  end;
+  FreeAndNil(vLabel);
+end;
+```
+
+

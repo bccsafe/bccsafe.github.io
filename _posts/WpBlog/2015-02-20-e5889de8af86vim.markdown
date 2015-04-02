@@ -1,0 +1,92 @@
+---
+author: bccsafe
+comments: true
+date: 2015-02-20 10:06:10+00:00
+layout: post
+slug: '%e5%88%9d%e8%af%86vim'
+title: 初识vim
+wordpress_id: 749
+categories:
+- wp_linux相关
+tags:
+- vim
+---
+
+大致在一年前拜读了池老师的mactalk，心里便一直惦记着这玩意，今年总算是最后下手了，买的是RMBP中配 不带独显的，上手第一件事就是找个文本编辑器，反复google后决定vim
+
+
+[http://blog.csdn.net/eric_xjj/article/details/8932502?utm_source=tuicool](http://blog.csdn.net/eric_xjj/article/details/8932502?utm_source=tuicool)
+
+根据上述教程一阵捣鼓，vim各种报错，不报错插件也装不上，判断下来应该是写入vimrc的配置有问题，最后使用如下脚本
+
+    
+     set nocompatible               " be iMproved  
+     filetype off                   " required!  
+      
+     set rtp+=~/.vim/bundle/vundle/  
+     call vundle#rc()   
+    
+    Bundle 'gmarik/vundle'  
+    Bundle 'L9'  
+    Bundle 'FuzzyFinder'   
+    Bundle 'git://git.wincent.com/command-t.git'  
+    
+    "Bundles托管插件示例
+    "代码在github上,使用github帐号/项目名，例如：
+    "Bundle 'tpope/vim-fugitive'
+    "代码在vimscript上，使用插件名称，插件名字可以在
+    "http://vim-scripts.org/vim/scripts.html页面中查找，例如：
+    "Bundle 'vimwiki'
+    
+    "非github的插件，使用其git地址，例如：
+    "Bundle 'git://git.wincent.com/command-t.git'
+    
+     filetype plugin indent on
+    "Brief help
+    ":BundleList - list configured bundles
+    ":BundleInstall(!) - install(update) bundles
+    ":BundleSearch(!) foo - search(or refresh cache first) for foo
+    ":BundleClean(!) - 删除插件首先要在.vimrc中注释掉插件相应的行，再运行该命令
+    "
+    "see :h vundle for more details or wiki for FAQ
+    "NOTE: comments after Bundle command are not allowed..
+
+
+
+
+插件是装上了，然后是代码高亮
+
+    
+    syntax enable 
+    set background=dark
+    colorscheme evening
+
+
+
+
+效果却是
+
+[![屏幕快照 2015-02-20 17.58.08](../../../../../public/Image/2015/02/屏幕快照-2015-02-20-17.58.08.png)](../../../../../public/Image/2015/02/屏幕快照-2015-02-20-17.58.08.png)
+
+
+
+
+
+和在vim里直接:colorscheme evening的效果差距也太大了，google得知还有个配置文件.gvimrc，去除如下代码
+
+    
+       highlight Normal guibg=grey90
+       highlight Cursor guibg=Green guifg=NONE
+       highlight lCursor guibg=Cyan guifg=NONE
+       highlight NonText guibg=grey80
+       highlight Constant gui=NONE guibg=grey95
+       highlight Special gui=NONE guibg=grey95
+
+
+
+
+搞定！[![屏幕快照 2015-02-20 17.57.01](../../../../../public/Image/2015/02/屏幕快照-2015-02-20-17.57.01.png)](../../../../../public/Image/2015/02/屏幕快照-2015-02-20-17.57.01.png)
+
+
+
+刚接触vim不久，要是哪里说错了请多包涵

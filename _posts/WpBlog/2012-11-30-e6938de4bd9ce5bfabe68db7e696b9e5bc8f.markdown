@@ -1,0 +1,174 @@
+---
+author: bccsafe
+comments: true
+date: 2012-11-30 08:48:50+00:00
+layout: post
+slug: '%e6%93%8d%e4%bd%9c%e5%bf%ab%e6%8d%b7%e6%96%b9%e5%bc%8f'
+title: 操作快捷方式 CLSID_ShellLink
+wordpress_id: 90
+categories:
+- wp_delphi学习笔记
+tags:
+- 快捷方式
+---
+
+**delphi下操作快捷方式还是比较方便的**
+
+**又是COM编程 调用相关的接口 然后XXOO...**
+
+**先抄一段用于创建快捷方式的函数   **
+
+**XP，Win7 (32位)测试通过 **
+
+
+
+``` delphi    
+//uses ShlObj, ActiveX, ComObj;
+//函数说明:
+//  第一个参数是要建立快捷方式的文件, 这是必须的; 其他都是可选参数
+//  第二个参数是快捷方式名称, 缺省使用参数一的文件名
+// 第三个参数是指定目的文件夹, 缺省目的是桌面; 如果有第四个参数, 该参数将被忽略
+//  第四个参数是用常数的方式指定目的文件夹; 该系列常数定义在 ShlObj 单元, CSIDL_ 打头
+
+//示例：
+//CreateShortcut(ParamStr(0));//把当前程序在桌面上建立快捷方式
+//CreateShortcut(ParamStr(0), 'NewLinkName');//在桌面上建立快捷方式, 同时指定快捷方式名称
+//CreateShortcut(ParamStr(0), '', 'C:\');//在 C:\ 下建立快捷方式
+//CreateShortcut(ParamStr(0), '', '', CSIDL_PROGRAMS); //在开始菜单的程序文件夹下建立快捷方式
+
+function CreateShortcut(Exe:string; Lnk:string = ''; Dir:string = ''; ID:Integer = -1):Boolean;
+var 
+  IObj: IUnknown;
+  ILnk: IShellLink;
+  IPFile: IPersistFile;
+  PIDL: PItemIDList;
+  InFolder: array[0..MAX_PATH] of Char;
+  LinkFileName: WideString;
+begin
+  Result := False;
+  if not FileExists(Exe) then Exit;
+  if Lnk = '' then Lnk := ChangeFileExt(ExtractFileName(Exe), '');
+  IObj := CreateComObject(CLSID_ShellLink);
+  ILnk := IObj as IShellLink;
+  ILnk.SetPath(PChar(Exe));
+  ILnk.SetWorkingDirectory(PChar(ExtractFilePath(Exe)));
+  if (Dir = '') and (ID = -1) then ID := CSIDL_DESKTOP;
+  if ID > -1 then
+  begin
+    SHGetSpecialFolderLocation(0, ID, PIDL);
+    SHGetPathFromIDList(PIDL, InFolder);
+    LinkFileName := Format('%s\%s.lnk', [InFolder, Lnk]);
+  end else
+  begin
+    Dir := ExcludeTrailingPathDelimiter(Dir);
+    if not DirectoryExists(Dir) then Exit;
+    LinkFileName := Format('%s\%s.lnk', [Dir, Lnk]);
+  end;
+  IPFile := IObj as IPersistFile;
+  if IPFile.Save(PWideChar(LinkFileName), False) = 0 then Result := True;
+end;
+```
+
+
+
+
+
+**下面这一段是修改快捷方式的   能够把原来指向的路径改掉**
+
+
+
+``` delphi    
+uses ShlObj, ActiveX;
+
+type
+    LINK_FILE_INFO = record
+      FileName: array [0 .. MAX_PATH] of Char; // 目标文件名
+      WorkDirectory: array [0 .. MAX_PATH] of Char; // 工作目录或者起始目录
+      IconLocation: array [0 .. MAX_PATH] of Char; // 图标文件名
+      IconIndex: Integer; // 图标索引
+      Arguments: array [0 .. MAX_PATH] of Char; // 程序运行的参数
+      Description: array [0 .. 255] of Char; // 快捷方式的描述
+      ItemIDList: PItemIDList; // 只供读取使用
+      RelativePath: array [0 .. 255] of Char; // 相对目录，只能设置
+      ShowState: Integer; // 运行时的窗口状态
+      HotKey: Word; // 快捷键
+    end;
+
+function LinkFileInfo(const lnkFileName:string;var info:LINK_FILE_INFO;const bSet:boolean):boolean;
+var
+ hr:hresult;
+ psl:IShelllink;
+ wfd:win32_find_data;
+ ppf:IPersistFile;
+ lpw:pwidechar;
+ buf:pwidechar;
+begin
+ result:=false;
+ getmem(buf,MAX_PATH);
+ try
+ if SUCCEEDED(CoInitialize(nil)) then
+ if (succeeded(cocreateinstance(clsid_shelllink,nil,clsctx_inproc_server,IID_IShellLinkA,psl))) then
+ begin
+   hr:=psl.QueryInterface(iPersistFile,ppf);
+   if succeeded(hr) then
+   begin
+     lpw:=stringtowidechar(lnkfilename,buf,MAX_PATH);
+     hr := ppf.Load(lpw, STGM_READ);
+     if succeeded(hr) then
+     begin
+       hr := psl.Resolve(0, SLR_NO_UI);
+       if succeeded(hr) then
+       begin
+         if bSet then
+         begin
+           psl.SetArguments(info.Arguments);
+           psl.SetDescription(info.Description);
+           psl.SetHotkey(info.HotKey);
+           psl.SetIconLocation(info.IconLocation,info.IconIndex);
+          psl.SetIDList(info.ItemIDList);      //注意这个别修改,不然图标就不好更换了，嘿嘿
+           psl.SetPath(info.FileName);
+           psl.SetShowCmd(info.ShowState);
+           psl.SetRelativePath(info.RelativePath,0);
+           psl.SetWorkingDirectory(info.WorkDirectory);
+           result:=succeeded(psl.Resolve(0,SLR_UPDATE));
+         end
+         else
+         begin
+           psl.GetPath(info.FileName,MAX_PATH, wfd,SLGP_SHORTPATH );
+           psl.GetIconLocation(info.IconLocation,MAX_PATH,info.IconIndex);
+           psl.GetWorkingDirectory(info.WorkDirectory,MAX_PATH);
+           psl.GetDescription(info.Description,255);
+           psl.GetArguments(info.Arguments,MAX_PATH);
+           psl.GetHotkey(info.HotKey);
+           psl.GetIDList(info.ItemIDList);
+           psl.GetShowCmd(info.ShowState);
+           showmessage(info.FileName);
+           result:=true;
+         end;
+      end;
+     end;
+   end;
+end;
+ finally
+ freemem(buf);
+ end;
+end;
+
+procedure ReviseLink(Linkpath,NewRunPath:string);
+var
+   info2,info3:LINK_FILE_INFO;
+begin
+   LinkFileInfo(LinkPath,info2,False);
+   strpcopy(info3.FileName,NewRunPath);
+   strpcopy(info3.WorkDirectory,ExtractfilePath(NewRunPath));
+   info3.Description:=info2.Description;
+   strpcopy(info3.IconLocation,info2.FileName);//这里用快捷方式原目标文件地址，不然修改后 原图标样式会被替换
+   info3.IconIndex:=0;//这里填0,不然修改完后原图标样式会被替换
+   info3.HotKey:=0;
+   LinkFileInfo(LinkPath,info3,True);
+end;
+```
+
+
+
+

@@ -1,0 +1,28 @@
+---
+author: bccsafe
+comments: true
+date: 2013-02-02 15:34:35+00:00
+layout: post
+slug: '%e9%80%9a%e8%bf%87%e8%85%be%e8%ae%af%e5%be%ae%e5%8d%9a%e8%8e%b7%e5%8f%96qq%e5%8f%b7%e7%a0%81'
+title: '通过腾讯微博获取QQ号码 '
+wordpress_id: 133
+categories:
+- wp_其他
+post_format:
+- 图像
+tags:
+- 通过腾讯微博获取QQ号码
+---
+
+分享个软件
+
+蛮好玩的社工利器
+
+功能么就是通过腾讯微博获取QQ号码  - -！
+
+作者微博：[ http://t.qq.com/laodaolove](http://t.qq.com/laodaolove)
+
+下载地址： [http://pan.baidu.com/share/link?shareid=262314&uk=2517425721](http://pan.baidu.com/share/link?shareid=262314&uk=2517425721)
+
+
+[![通过腾讯微博获取QQ号码](../../../../../public/Image/2013/02/1.jpg)](../../../../../public/Image/2013/02/1.jpg)

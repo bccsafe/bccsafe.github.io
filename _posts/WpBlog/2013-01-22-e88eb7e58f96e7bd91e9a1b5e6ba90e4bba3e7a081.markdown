@@ -1,0 +1,102 @@
+---
+author: bccsafe
+comments: true
+date: 2013-01-22 14:46:05+00:00
+layout: post
+slug: '%e8%8e%b7%e5%8f%96%e7%bd%91%e9%a1%b5%e6%ba%90%e4%bb%a3%e7%a0%81'
+title: 获取网页源代码
+wordpress_id: 125
+categories:
+- wp_delphi学习笔记
+tags:
+- 获取网页源代码
+---
+
+delphi获取网页源代码可以使用用像IDHTTP之类的控件
+
+很简单 但是对于有些程序  他既没有界面 又要求体积小
+
+自然不可能为了这个小功能而带上那么大的一个库
+
+所以在这里介绍2种方法 ...        (嘘~~咱别处挖来的)
+
+方法一 
+
+这是比较常用的
+
+但是看这个代码 怎么跟URLDown差不多
+
+InternetOpenUrl   InternetReadFile   这两函数肯定要被杀软杀的  下载者的核心...
+
+``` delphi 
+uses WinInet; 
+
+function GetWebPage(const Url: string):string; 
+var 
+   Session, 
+   HttpFile:HINTERNET; 
+   szSizeBuffer:Pointer; 
+   dwLengthSizeBuffer:DWord; 
+   dwReserved:DWord; 
+   dwFileSize:DWord; 
+   dwBytesRead:DWord; 
+   Contents:PChar; 
+begin 
+   Session:=InternetOpen(’’,0,niL,niL,0); 
+   HttpFile:=InternetOpenUrl(Session,PChar(Url),niL,0,0,0); 
+   dwLengthSizeBuffer:=1024; 
+   HttpQueryInfo(HttpFile,5,szSizeBuffer,dwLengthSizeBuffer,dwReserved); 
+   GetMem(Contents,dwFileSize); 
+   InternetReadFile(HttpFile,Contents,dwFileSize,dwBytesRead); 
+   InternetCloseHandle(HttpFile); 
+   InternetCloseHandle(Session); 
+   Result:=StrPas(Contents); 
+   FreeMem(Contents); 
+end;
+```
+
+方法二
+
+代码较为精简...不被误杀
+
+``` delphi    
+uses MsXML;
+
+var
+  req: IXMLHTTPRequest;
+begin 
+  req :=CoXMLHTTPRequest.Create;
+  req.open('Get', 'http://www.bccsafe.com/', False,EmptyParam, EmptyParam);
+  req.send(EmptyParam);
+ // Memo1.Text := req.responseText;
+end;
+//以上代码在D7下测试通过
+
+
+
+
+
+uses  
+  ComObj;  
+
+function GetText: string;  
+const  
+    Address: string = 'http://www.bccsafe.com';  
+var  
+  xmlHttp: OleVariant;  
+begin  
+  xmlHttp:= CreateOleObject('Microsoft.XMLHTTP');  
+  try  
+    xmlHttp.Open('GET', Address, False);  
+    xmlHttp.Send;  
+    if xmlHttp.status='200' then  
+    begin  
+      Result:=xmlHttp.responseText;  
+    end;  
+  except  
+    Result:='';  
+  end;  
+end;
+```    
+
+

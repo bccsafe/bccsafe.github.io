@@ -1,0 +1,62 @@
+---
+author: bccsafe
+comments: true
+date: 2013-10-19 09:35:22+00:00
+layout: post
+slug: panel%e5%86%85%e5%b5%8c%e7%a8%8b%e5%ba%8f%e7%aa%97%e4%bd%93
+title: panel内嵌程序窗体
+wordpress_id: 389
+categories:
+- wp_delphi学习笔记
+tags:
+- 内嵌程序窗体
+---
+``` delphi
+function RunAppInPanel(const AppFileName: string; ParentHandle: HWND; var WinHandle: HWND): Boolean;
+var
+  si: STARTUPINFO;
+  pi: TProcessInformation;
+begin
+  Result := False;
+
+  // 启动进程
+  FillChar(si, SizeOf(si), 0);
+  si.cb := SizeOf(si);
+  si.wShowWindow := SW_SHOW;
+  if not CreateProcess(nil, PChar(AppFileName), nil, nil, true,
+    CREATE_NEW_CONSOLE or NORMAL_PRIORITY_CLASS, nil, nil, si, pi) then Exit;
+
+  // 等待进程启动
+  WaitForInputIdle(pi.hProcess, 10000);
+
+  // 取得进程的 Handle
+  WinHandle := GetProcessWindow(pi.dwProcessID);
+  if WinHandle > 0 then begin
+    // 设定父窗体
+    Windows.SetParent(WinHandle, ParentHandle);
+
+    // 设定窗体位置
+    SetWindowPos(WinHandle, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOZORDER);
+
+    // 去掉标题栏
+    SetWindowLong(WinHandle, GWL_STYLE, GetWindowLong(WinHandle, GWL_STYLE)
+      and (not WS_CAPTION) and (not WS_BORDER) and (not WS_THICKFRAME));
+
+    Result := True;
+  end;
+
+  // 释放 Handle
+  CloseHandle(pi.hProcess);
+  CloseHandle(pi.hThread);
+end;
+
+//var hWin: HWND = 0;
+//FormClose
+//  if hWin > 0 then PostMessage(hWin, WM_CLOSE, 0, 0);
+//FormResize
+//  if hWin <> 0 then MoveWindow(hWin, 0, 0, panel1.ClientWidth, panel1.ClientHeight, True);
+
+//if not RunAppInPanel(App, panel1.Handle, hWin) then ShowMessage('App not found');
+```
+
+

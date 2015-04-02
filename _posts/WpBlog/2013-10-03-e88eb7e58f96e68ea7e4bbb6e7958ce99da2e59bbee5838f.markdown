@@ -1,0 +1,43 @@
+---
+author: bccsafe
+comments: true
+date: 2013-10-03 18:40:48+00:00
+layout: post
+slug: '%e8%8e%b7%e5%8f%96%e6%8e%a7%e4%bb%b6%e7%95%8c%e9%9d%a2%e5%9b%be%e5%83%8f'
+title: 获取控件界面图像
+wordpress_id: 384
+categories:
+- wp_delphi学习笔记
+tags:
+- 控件截图
+---
+
+
+
+正好在个论坛上看到这段代码
+
+可以获取到界面上控件的图像
+
+写的还是比较短小巧妙的
+
+``` delphi   
+function GetBitmap(Control : TControl; SavePath:string): Boolean;
+var
+  Cnv             : TControlCanvas;
+  Bmp             : TBitmap;
+begin
+  Cnv             := TControlCanvas.Create;
+  Bmp             := TBitmap.Create;
+  Cnv.Control     := Control;
+  Bmp.Width       := Control.Width;
+  Bmp.Height      := Control.Height;
+  Bmp.Canvas.Copyrect(Bmp.Canvas.ClipRect, Cnv, Cnv.ClipRect);
+  Bmp.SaveToFile(SavePath);
+  Bmp.Free;
+  Cnv.Free;
+end;
+
+//GetBitmap(memo1, 'C:\test.bmp');
+```
+
+

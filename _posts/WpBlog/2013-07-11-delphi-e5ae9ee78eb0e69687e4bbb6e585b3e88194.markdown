@@ -1,0 +1,69 @@
+---
+author: bccsafe
+comments: true
+date: 2013-07-11 08:50:37+00:00
+layout: post
+slug: delphi-%e5%ae%9e%e7%8e%b0%e6%96%87%e4%bb%b6%e5%85%b3%e8%81%94
+title: delphi 实现文件关联
+wordpress_id: 266
+categories:
+- wp_delphi学习笔记
+tags:
+- 文件关联
+---
+
+修改自万一老师的code，他的是在D XE4下的
+
+还有这段代码并不能绕过UAC，测试下来依然会有提示
+
+测试环境：D XE2 + Win7 32位 家庭版
+
+``` delphi   
+uses System.IOUtils, Winapi.ShellAPI, Winapi.ShlObj; //RegApp 函数用到的单元
+
+//关联默认程序的函数
+procedure RegApp(const aExt, aAppName, aAppPath: string);
+const
+  nRegFmt = 'Windows Registry Editor Version 5.00'        + sLineBreak +
+            '[HKEY_CLASSES_ROOT\%0:s]'                    + sLineBreak +
+            '@="%1:s"'                                    + sLineBreak +
+            '[HKEY_CLASSES_ROOT\%1:s\DefaultIcon]'        + sLineBreak +
+            '@="%2:s,0"'                                  + sLineBreak +
+            '[HKEY_CLASSES_ROOT\%1:s\shell]'              + sLineBreak +
+            '[HKEY_CLASSES_ROOT\%1:s\shell\open]'         + sLineBreak +
+            '[HKEY_CLASSES_ROOT\%1:s\shell\open\command]' + sLineBreak +
+            '@="%3:s"';
+var
+  RegStr: string;
+  str3, str4: string;
+  RegTmpFile: string;
+begin
+  str3 := StringReplace(aAppPath,'\', '\\',[rfReplaceAll]);
+  str4:=StringReplace( Format('"%s" "%%1"', [str3]) ,'"', '\"',[rfReplaceAll] );
+  RegStr := Format(nRegFmt, [aExt, aAppName, str3, str4]);
+  RegTmpFile := TPath.GetTempPath + 'RegTmp.reg';
+  with TStringList.Create do begin
+    Text := RegStr;
+    SaveToFile(RegTmpFile);
+    Free;
+  end;
+  ShellExecute(0, nil, PChar(RegTmpFile), nil, nil, SW_SHOWNORMAL);
+  SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nil, nil); //刷新图标显示
+end;
+
+//执行注册函数; 执行后, 可随便修改一个文本文件的后缀为 tst, 然后双击测试
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+RegApp('.tst', 'MyApp1', Application.ExeName); //假定程序名称是 MyApp1, 要打开的文件的后缀是 .tst
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+var
+  S: string;
+begin
+  S := ParamStr(1);
+  if FileExists(S) then Memo1.Lines.LoadFromFile(S);
+end;
+```
+
+

@@ -1,0 +1,31 @@
+---
+author: bccsafe
+comments: true
+date: 2013-06-14 15:43:54+00:00
+layout: post
+slug: '%e9%80%9a%e7%94%a8%e5%ae%a2%e6%88%b7%e7%ab%af%e7%94%9f%e6%88%90%e5%99%a8'
+title: 通用客户端生成器
+wordpress_id: 249
+categories:
+- wp_My Work
+post_format:
+- 图像
+tags:
+- 生成器
+---
+
+delphi xe2写的一个小工具
+
+用于修改远控客户端的上线信息
+
+因为带有保存配置的功能，可以作为几乎所有远控的生成器使用
+
+当下载的远控没有自带生成器时，这个就可以作为替代。
+
+[![通用客户端生成器](../../../../../public/Image/2013/06/20130614234124.jpg)](../../../../../public/Image/2013/06/20130614234124.jpg)
+
+注意：保存的路径为相对路径，移植到其他机器后只要相对路径不变，即可直接生成不需要再次修改配置。
+
+下载地址：[http://pan.baidu.com/s/1i3KEWPv](http://pan.baidu.com/s/1i3KEWPv)
+
+

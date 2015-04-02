@@ -1,0 +1,70 @@
+---
+author: bccsafe
+comments: true
+date: 2014-06-27 18:22:04+00:00
+layout: post
+slug: aes-%e5%8a%a0%e5%af%86%e7%ae%97%e6%b3%95
+title: AES 加密算法
+wordpress_id: 559
+categories:
+- wp_Code[Delphi]
+tags:
+- AES
+---
+
+网上找了下关于delphi的AES算法，发现不支持高版本的Delphi，罪魁祸首还是字符串，使用Soap.EncdDecd单元进行Encode编码即可
+
+核心代码：
+
+``` delphi   
+function EncryptString(Value: String; Key: String;
+  KeyBit: TKeyBit = kb128): String;
+var
+  SS, DS: TStringStream;
+  Ms: TMemoryStream;
+  AESKey128: TAESKey128;
+  AESKey192: TAESKey192;
+  AESKey256: TAESKey256;
+begin
+  Result := '';
+  Value := Trim(Value); //去掉空格
+  SS := TStringStream.Create(Value);
+  DS := TStringStream.Create('');
+  Ms := TMemoryStream.Create;
+
+  try
+    {  --  128 位密匙最大长度为 16 个字符 --  }
+    if KeyBit = kb128 then
+    begin
+      FillChar(AESKey128, SizeOf(AESKey128), 0);
+      Move(PChar(Key)^, AESKey128, Min(SizeOf(AESKey128), Length(Key)));
+      EncryptAESStreamECB(SS, 0, AESKey128, MS);
+    end;
+    {  --  192 位密匙最大长度为 24 个字符 --  }
+    if KeyBit = kb192 then
+    begin
+      FillChar(AESKey192, SizeOf(AESKey192), 0);
+      Move(PChar(Key)^, AESKey192, Min(SizeOf(AESKey192), Length(Key)));
+      EncryptAESStreamECB(SS, 0, AESKey192, MS);
+    end;
+    {  --  256 位密匙最大长度为 32 个字符 --  }
+    if KeyBit = kb256 then
+    begin
+      FillChar(AESKey256, SizeOf(AESKey256), 0);
+      Move(PChar(Key)^, AESKey256, Min(SizeOf(AESKey256), Length(Key)));
+      EncryptAESStreamECB(SS, 0, AESKey256, MS);
+    end;
+    Ms.Position := 0;
+    EncodeStream(MS, DS);
+    Result := StrToHex(DS.DataString);
+  finally
+    Ms.Free;
+    SS.Free;
+    DS.Free;
+  end;
+end;
+```
+
+
+
+[下载地址](http://pan.baidu.com/s/1dDxjlAh)

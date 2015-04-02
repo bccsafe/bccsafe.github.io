@@ -1,0 +1,76 @@
+---
+author: bccsafe
+comments: true
+date: 2013-09-06 11:40:03+00:00
+layout: post
+slug: delphi-%e5%87%a0%e8%a1%8c%e4%bb%a3%e7%a0%81%e5%88%b6%e4%bd%9c%e8%b5%84%e6%ba%90%e7%ae%a1%e7%90%86%e5%99%a8
+title: delphi 几行代码制作资源管理器
+wordpress_id: 336
+categories:
+- wp_delphi学习笔记
+tags:
+- 几行代码制作资源管理器
+---
+
+刚进大学，事情也好多，整个星期都没怎么玩
+
+拿点硬盘里的存货出来好了...
+
+忘记是哪里看来的了
+
+这种高端大气上档次的代码一看就知道不是我写的。。。
+
+
+
+
+
+几行代码就可以制作出一个资源管理器
+
+不需要使用treeview等控件
+
+
+
+``` delphi    
+uses Vcl.Shell.ShellCtrls;
+
+var
+  C: TShellComboBox;
+  T: TShellTreeView;
+  L: TShellListView;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  C := TShellComboBox.Create(Self);
+  T := TShellTreeView.Create(Self);
+  L := TShellListView.Create(Self);
+
+  C.Parent := Self;
+  T.Parent := Self;
+  L.Parent := Self;
+  T.Width := Screen.Width div 4;
+
+  C.Align := alTop;
+  T.Align := alLeft;
+  L.Align := alClient;
+
+  T.ShellComboBox := C;
+  L.ShellTreeView := T;
+
+  L.ViewStyle := vsList;
+
+  T.OnChange := TreeViewOnChange;
+end;
+
+procedure TForm1.TreeViewOnChange(Sender: TObject; Node: TTreeNode);
+begin
+  Caption := T.SelectedFolder.PathName;
+end;
+```
+
+
+
+源代码下载地址：
+
+[http://pan.baidu.com/share/link?shareid=4083964132&uk=1982385223](http://pan.baidu.com/share/link?shareid=4083964132&uk=1982385223)
+
+

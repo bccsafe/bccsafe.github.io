@@ -1,0 +1,294 @@
+---
+author: bccsafe
+comments: true
+date: 2012-12-11 15:14:24+00:00
+layout: post
+slug: '%e5%90%af%e5%8a%a8%e5%a4%96%e9%83%a8%e7%a8%8b%e5%ba%8f%e5%b9%b6%e7%ad%89%e5%be%85%e5%ae%83%e7%bb%93%e6%9d%9f'
+title: 启动外部程序并等待它结束
+wordpress_id: 98
+categories:
+- wp_Code[Delphi]
+tags:
+- RunWait
+---
+
+**启动外部程序并等待它结束**
+
+**收集的一段代码 有时候在特殊情况下需要用到**
+
+**核心API：WaitForSingleObject，CreateProcess**
+
+``` delphi    
+function RunWait(FileName: string; Visibility: Integer): THandle;
+var
+    zAppName: array[0..512] of Char;
+    zCurDir: array[0..255] of Char;
+    WorkDir: string;
+    StartupInfo: TStartupInfo;
+    ProcessInfo: TProcessInformation;
+begin
+    try
+      StrPCopy(zAppName, FileName);
+      GetDir(0, WorkDir);
+      StrPCopy(zCurDir, WorkDir);
+      FillChar(StartupInfo, SizeOf(StartupInfo), #0);
+      StartupInfo.cb := SizeOf(StartupInfo);
+      StartupInfo.dwFlags := STARTF_USESHOWWINDOW;
+      StartupInfo.wShowWindow := Visibility;
+      if not CreateProcess(nil, zAppName, nil, nil, false, Create_NEW_CONSOLE or NORMAL_PRIORITY_CLASS, nil, nil, StartupInfo, ProcessInfo) then
+      begin
+        result := 0;
+        Exit;
+      end
+      else
+      begin
+        WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
+        GetExitCodeProcess(ProcessInfo.hProcess, result);
+      end;
+    finally
+    end;
+end;
+
+//示例： RunWait('C:\Project1.exe', SW_SHOWDEFAULT );
+```
+
+参数 Visibility 取值如下：
+行号 参数 含义
+
+* 1 SW_HIDE 隐藏这个窗体，并激活其他窗体
+* 2 SW_MAXIMIZE 最大化指定的窗体。
+* 3 SW_MINIMIZE 最小化指定的窗体，并按顺序激活最上层的窗体。
+* 4 SW_RESTORE 激活并显示窗体。如果窗体为最小化或者最大化，窗体恢复到原始大小和置。应用程序当恢复一个最小化的窗体时将指定标记。
+* 5 SW_SHOW 以当前的大小和位置激活并显示窗体。
+* 6 SW_SHOWDEFAULT 
+* 7 SW_SHOWMAXIMIZED 激活并最大化显示窗体。
+* 8 SW_SHOWMINIMIZED 激活并最小化现实窗体。
+* 9 SW_SHOWMINNOACTIVE 最小化窗体，保持其激活状态。
+* 10 SW_SHOWNA 以当前状态显示窗体，保持其激活状态。
+* 11 SW_SHOWNOACTIVATE 以当前的大小和位置显示窗体，并保持其激活状态。
+* 12 SW_SHOWNORMAL 激活并显示一个窗体。如果窗体为最大化或者最小化，窗体恢复到原始的大小和位置。当窗体第一次显示的时候，应用程序记录标记。
+
+
+
+**再贴一段WaitForSingleObject的用法说明   CreateProcess需要的话自己百度...太长了 **
+
+
+
+
+
+
+
+> 
+> ## WaitForSingleObject函数
+> 
+> 
+**VC声明**
+
+> 
+> 
+DWORD WaitForSingleObject(
+
+> 
+> 
+HANDLE hHandle,
+
+> 
+> 
+DWORD dwMilliseconds
+
+> 
+> 
+);
+
+> 
+> ### 参数
+> 
+> 
+_hHandle_ [in]对象句柄。可以指定一系列的对象，如Event、Job、Memory resource notification、Mutex、Process、Semaphore、Thread、Waitable timer等。
+
+> 
+> 
+当等待仍在[挂起状态](http://baike.baidu.com/view/1268241.htm)时，句柄被关闭，那么函数行为是未定义的。该句柄必须具有 SYNCHRONIZE 访问权限。
+
+> 
+> 
+_dwMilliseconds_ [in]定时时间间隔，单位为milliseconds（毫秒）.如果指定一个非零值，函数处于等待状态直到_hHandle_ 标记的对象被触发，或者时间到了。如果_dwMilliseconds_ 为0，对象没有被触发信号，函数不会进入一个等待状态，它总是立即返回。如果_dwMilliseconds_ 为INFINITE，对象被触发信号后，函数才会返回。
+
+> 
+> ### 返回值
+> 
+> 
+执行成功，返回值指示出引发函数返回的事件。它可能为以下值：
+
+> 
+> 
+<table >
+<tbody >
+<tr >
+
+
+</tr>
+<tr >
+
+> <td >WAIT_ABANDONED0x00000080L
+> </td>
+
+> <td >The specified object is a mutex object that was not released by the thread that owned the mutex object before the owning thread terminated. Ownership of the mutex object is granted to the calling thread and the mutex state is set to nonsignaled.
+If the mutex was protecting persistent state information, you should check it for consistency.
+> </td>
+</tr>
+<tr >
+
+> <td >WAIT_OBJECT_00x00000000L
+> </td>
+
+> <td >The state of the specified object is signaled.
+> </td>
+</tr>
+<tr >
+
+> <td >WAIT_TIMEOUT0x00000102L
+> </td>
+
+> <td >The time-out interval elapsed, and the object's state is nonsignaled.
+> </td>
+</tr>
+<tr >
+
+> <td >WAIT_FAILED(DWORD)0xFFFFFFFF
+> </td>
+
+> <td >The function has failed. To get extended error information, call **GetLastError**.
+> </td>
+</tr>
+</tbody>
+</table>
+
+> 
+> 
+WaitForSingleObject函数用来检测hHandle事件的信号状态，在某一线程中调用该函数时，线程暂时挂起，如果在挂起的dwMilliseconds毫秒内，线程所等待的对象变为有信号状态，则该函数立即返回；如果超时时间已经到达dwMilliseconds毫秒，但hHandle所指向的对象还没有变成有信号状态，函数照样返回。参数dwMilliseconds有两个具有特殊意义的值：0和INFINITE。若为0，则该函数立即返回；若为INFINITE，则线程一直被挂起，直到hHandle所指向的对象变为有信号状态时为止。
+
+> 
+> 
+**返回值：**
+
+> 
+> 
+_WAIT_ABANDONED 0x00000080：_当hHandle为mutex时，如果拥有mutex的线程在结束时没有释放核心对象会引发此返回值。
+
+> 
+> 
+WAIT_OBJECT_0 0x00000000 ：核心对象已被激活
+
+> 
+> 
+WAIT_TIMEOUT 0x00000102：等待超时
+
+> 
+> 
+WAIT_FAILED 0xFFFFFFFF ：出现错误，可通过GetLastError得到错误代码
+
+> 
+> 
+在这里举个例子：
+
+> 
+> 
+先创建一个全局Event对象g_event:
+
+> 
+> 
+CEvent g_event;
+
+> 
+> 
+在程序中可以通过调用CEvent::SetEvent设置事件为有信号状态。
+
+> 
+> 
+下面是一个线程函数MyThreadPro()
+
+> 
+> 
+UINT CFlushDlg::MyThreadProc( LPVOID pParam )
+
+> 
+> 
+{
+
+> 
+> 
+WaitForSingleObject(g_event,INFINITE);
+
+> 
+> 
+For(;;)
+
+> 
+> 
+{
+
+> 
+> 
+………….
+
+> 
+> 
+}
+
+> 
+> 
+return 0;
+
+> 
+> 
+}
+
+> 
+> 
+在这个线程函数中只有设置g_event为有信号状态时才执行下面的for循环，因为g_event是[全局变量](http://baike.baidu.com/view/261041.htm)，所以我们可以在别的线程中通过g_event. SetEvent控制这个线程。
+
+> 
+> 
+还有一种用法就是我们可以通过WaitForSingleObject函数来间隔的执行一个线程函数的函数体
+
+> 
+> 
+UINT CFlushDlg::MyThreadProc( LPVOID pParam )
+
+> 
+> 
+{
+
+> 
+> 
+while(WaitForSingleObject(g_event,MT_INTERVAL)!=WAIT_OBJECT_0)
+
+> 
+> 
+{
+
+> 
+> 
+………………
+
+> 
+> 
+}
+
+> 
+> 
+return 0;
+
+> 
+> 
+}
+
+> 
+> 
+在这个线程函数中可以通过设置MT_INTERVAL来控制这个线程的[函数体](http://baike.baidu.com/view/1377635.htm)多久执行一次，当事件为无信号状态时函数体隔MT_INTERVAL执行一次，当设置事件为有信号状态时，线程就执行完毕了。
+
+</blockquote>
+
+
+

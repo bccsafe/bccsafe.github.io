@@ -1,0 +1,50 @@
+---
+author: bccsafe
+comments: true
+date: 2014-07-06 16:02:32+00:00
+layout: post
+slug: '%e5%b7%ae%e8%b7%9d%e6%9c%89%e6%97%b6%e5%80%99%e5%b0%b1%e4%bd%93%e7%8e%b0%e5%9c%a8%e7%bb%86%e8%8a%82%e4%b8%8a'
+title: 差距有时候就体现在细节上
+wordpress_id: 565
+categories:
+- wp_杂谈
+---
+
+在一个群里无意间看到了一段获取外网IP的函数，出自某大牛之手，原理就是访问ip138然后从中获取IP，很简单的一段代码，如下
+
+``` delphi     
+function UseWebGetExternalIp: string;
+var
+  Xml : OleVariant;
+  Response : string;
+  p1, p2 : Integer;
+  Match : TMatch;
+begin
+  Result := '';
+  CoInitialize(nil);
+  Xml := CreateOleObject('Microsoft.XMLHTTP');
+  try
+    Xml.Open('GET', 'http://www.ip138.com', 'False');
+    Xml.Send;
+    Response := Xml.ResponseText;
+    Match := TRegEx.Match(Response, '(?<=iframe src=")[^\s, ^"]*');
+    if Match.Success then
+    begin
+      Xml.Open('GET', Match.Value, 'False');
+      Xml.Send;
+      Response := Xml.ResponseText;
+      Match := TRegEx.Match(Response, '(?<=\[)[^\s, ^\]]*');
+      if Match.Success then
+        Result := Match.Value;
+    end;
+  finally
+    Xml := '';
+  end;
+end;
+```
+
+ 
+
+首先是CoInitialize(nil) ，想的很周全，我是没想到，然后是正则，像我这种渣渣估计就是pos+copy了，如此简单的一段代码就能体现出差距，诶
+
+不要说我盲从，这段代码是以截图的形式发出来的，我看到的第一反应就是 我为什么写不出如此优雅的代码，然后默默不说话 码一遍！

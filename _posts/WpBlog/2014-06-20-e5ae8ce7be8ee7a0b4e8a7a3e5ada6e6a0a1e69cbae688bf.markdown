@@ -1,0 +1,27 @@
+---
+author: bccsafe
+comments: true
+date: 2014-06-20 03:43:42+00:00
+layout: post
+slug: '%e5%ae%8c%e7%be%8e%e7%a0%b4%e8%a7%a3%e5%ad%a6%e6%a0%a1%e6%9c%ba%e6%88%bf'
+title: 完美破解学校机房
+wordpress_id: 546
+categories:
+- wp_其他
+---
+
+马上就要离开现在的这个校区了，机房的上网限制还有老师的远程控制也都已经破解，放出工具，造福学弟学妹～～
+
+[http://pan.baidu.com/s/1jGurj5k](http://pan.baidu.com/s/1jGurj5k)
+
+
+工具内提供了对教师机控制的一键破解
+
+另外还具备局域网聊天及传输文件的功能(考试时你懂的)
+
+上网限制的破解并没有集成，手动操作吧
+
+本地连接属性里取消一个名为pass什么的协议即可
+
+
+[![](../../../../../public/Image/2014/06/FreedomPCR.jpg)](../../../../../public/Image/2014/06/FreedomPCR.jpg)

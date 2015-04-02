@@ -1,0 +1,39 @@
+---
+author: bccsafe
+comments: true
+date: 2013-08-06 05:12:46+00:00
+layout: post
+slug: '%e5%bb%b6%e8%bf%9f%e5%87%bd%e6%95%b0-%e6%af%94sleep%e6%95%88%e6%9e%9c%e5%a5%bd'
+title: 延迟函数 比sleep效果好
+wordpress_id: 294
+categories:
+- wp_Code[Delphi]
+tags:
+- 延迟函数
+---
+
+sleep是会阻塞线程的
+
+网上有些延迟函数测试下来还是会阻塞，而接下来推荐的代码则不会
+   
+``` delphi
+procedure delay(dwMilliseconds:integer);
+var
+  firsttickcount: longint;
+begin
+  firsttickcount := gettickcount;
+  repeat
+    application.processmessages;
+  until ((gettickcount - firsttickcount) >= longint(dwMilliseconds));
+end;
+```
+
+
+
+
+
+
+
+感谢 [醉倚黄昏](http://zyhh.me/) 的提醒，上述代码在连续开机很长一段时间后将会失效，大概是24天左右
+
+服务器可能会受影响，个人PC不用考虑

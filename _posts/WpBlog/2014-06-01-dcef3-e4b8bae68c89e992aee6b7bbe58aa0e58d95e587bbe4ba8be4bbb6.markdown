@@ -1,0 +1,95 @@
+---
+author: bccsafe
+comments: true
+date: 2014-06-01 15:38:07+00:00
+layout: post
+slug: dcef3-%e4%b8%ba%e6%8c%89%e9%92%ae%e6%b7%bb%e5%8a%a0%e5%8d%95%e5%87%bb%e4%ba%8b%e4%bb%b6
+title: dcef3 为按钮添加单击事件
+wordpress_id: 528
+categories:
+- wp_dcef3
+tags:
+- dcef3 DOM
+---
+
+演示dcef3操作HTML DOM的方法
+
+本来想拿Google下手，可是由于GFW的关系，还是用Baidu测试好了
+
+给标题名为“百度一下”的按钮添加一个执行delphi函数的单击事件
+
+``` delphi    
+{$I cef.inc}
+
+type
+  TCustomRenderProcessHandler = class(TCefRenderProcessHandlerOwn)
+  protected
+    procedure OnWebKitInitialized; override;
+    function OnProcessMessageReceived(const browser: ICefBrowser; sourceProcess: TCefProcessId;
+      const message: ICefProcessMessage): Boolean; override;
+  end;
+
+  TTestExtension = class
+    class function hello: string;
+  end;
+
+procedure TMainForm.Button2Click(Sender: TObject);
+begin
+  Chromium.browser.SendProcessMessage(PID_RENDERER,
+    TCefProcessMessageRef.New('visitdom'));//操作DOM
+end;
+
+procedure ButtonClickProc(const Event: ICefDomEvent);
+begin
+  ShowMessage('Click The Button');
+end;
+
+procedure VisitDomProc(const Doc: ICefDomDocument);
+var
+  ButtonNode: ICefDomNode;
+begin
+  ButtonNode := Doc.GetElementById('su1');
+  if Assigned(ButtonNode) then
+    ButtonNode.AddEventListenerProc('click', True, ButtonClickProc);
+end;
+
+{ TCustomRenderProcessHandler }
+
+function TCustomRenderProcessHandler.OnProcessMessageReceived(
+  const browser: ICefBrowser; sourceProcess: TCefProcessId;
+  const message: ICefProcessMessage): Boolean;
+begin
+{$IFDEF DELPHI14_UP}
+  if (message.Name = 'visitdom') then
+    begin
+      browser.MainFrame.VisitDomProc( VisitDomProc);
+        Result := True;
+    end
+  else
+{$ENDIF}
+    Result := False;
+end;
+
+procedure TCustomRenderProcessHandler.OnWebKitInitialized;
+begin
+{$IFDEF DELPHI14_UP}
+  TCefRTTIExtension.Register('app', TTestExtension);
+{$ENDIF}
+end;
+
+{ TTestExtension }
+
+class function TTestExtension.hello: string;
+begin
+   Result := 'Hello from Delphi';
+end;
+
+initialization 
+  CefRenderProcessHandler := TCustomRenderProcessHandler.Create;
+  CefBrowserProcessHandler := TCefBrowserProcessHandlerOwn.Create;
+end.
+```
+
+
+
+[![dcef3_AddButtonClickEvent](../../../../../public/Image/2014/06/dcef3_AddButtonClickEvent.jpg)](../../../../../public/Image/2014/06/dcef3_AddButtonClickEvent.jpg)

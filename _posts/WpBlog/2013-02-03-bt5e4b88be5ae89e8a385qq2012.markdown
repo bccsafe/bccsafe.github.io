@@ -1,0 +1,29 @@
+---
+author: bccsafe
+comments: true
+date: 2013-02-03 07:18:10+00:00
+layout: post
+slug: bt5%e4%b8%8b%e5%ae%89%e8%a3%85qq2012
+title: BT5下安装QQ2012
+wordpress_id: 135
+categories:
+- wp_linux相关
+post_format:
+- 图像
+tags:
+- QQ for BT5
+---
+
+BT5下安装QQ2012
+
+下载地址：    [http://www.longene.org/download/WineQQ2012-20120719-Longene.deb](http://www.longene.org/download/WineQQ2012-20120719-Longene.deb)
+
+安装命令：sudo dpkg -i WineQQ2012-20120719-Longene.deb
+
+他会报错 但是不影响
+
+打开/opt/longene/qq2012    QQ就在里面了
+
+详情见：[http://www.linuxidc.com/Linux/2012-11/73575.htm](http://www.linuxidc.com/Linux/2012-11/73575.htm)
+
+[![QQ for bt5](../../../../../public/Image/2013/02/11.jpg)](../../../../../public/Image/2013/02/11.jpg)

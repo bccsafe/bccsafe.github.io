@@ -1,0 +1,63 @@
+---
+author: bccsafe
+comments: true
+date: 2013-04-03 15:05:13+00:00
+layout: post
+slug: linux%e4%b8%8b%e8%bf%90%e8%a1%8c%e9%ad%94%e5%85%bd
+title: Linux下运行魔兽
+wordpress_id: 153
+categories: 
+- wp_linux相关
+post_format:
+- 图像
+tags:
+- linux魔兽
+---
+
+清明难得可以休息了...来更下BLOG= =
+
+这次尝试在BT5下借助WINE运行魔兽
+
+
+1. 安装WINE，不知道是BT5自带的 还是我后来装的 反正已经有了，没的话
+
+		sudo apt-get install wine
+
+
+
+2. 安装 VC 运行库，借用winetricks这个脚本来安装（[http://www.kegel.com/wine/winetricks](http://www.kegel.com/wine/winetricks)，复制粘帖后保存成winetricks.sh）
+
+		sh winetricks vcrun6 vcrun2005sp1
+
+3. 安装魔兽，去外面随便下个魔兽，然后在WINE里打开安装，绿色的话直接复制文件，然后注册表改改。
+
+4. 运行魔兽，-opengl这个参数一定要有（WINE设置方面我建议开虚拟桌面，然后把LINUX的桌面特效关掉）
+
+
+		wine War3.exe -opengl
+ 
+
+[![魔兽](../../../../../public/Image/2013/04/未命名.jpg)](../../../../../public/Image/2013/04/未命名.jpg)
+
+
+
+
+
+
+最后来总结下...安装完后可能并不能完美的运行，卡的原因可能有一下几个
+
+1. WINE的版本过低
+
+2. 没装显卡驱动
+
+3. -opengl参数没带 - -#
+
+
+
+以上个人愚见，如有错误求指正
+
+
+
+
+
+

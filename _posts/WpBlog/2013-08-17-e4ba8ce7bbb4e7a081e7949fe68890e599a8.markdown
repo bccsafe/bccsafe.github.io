@@ -1,0 +1,32 @@
+---
+author: bccsafe
+comments: true
+date: 2013-08-17 15:30:13+00:00
+layout: post
+slug: '%e4%ba%8c%e7%bb%b4%e7%a0%81%e7%94%9f%e6%88%90%e5%99%a8'
+title: 二维码生成器
+wordpress_id: 302
+categories:
+- wp_delphi学习笔记
+tags:
+- 生成二维码
+---
+
+delphi 实现生成二维码
+
+没什么特别的吧，就使用了Google Charts的API 
+
+WinInet实现Get请求
+
+
+
+[![二维码生成器](../../../../../public/Image/2013/08/1.jpg)](../../../../../public/Image/2013/08/1.jpg)
+
+
+源代码下载地址
+
+[ http://pan.baidu.com/share/link?shareid=158095877&uk=1982385223]( http://pan.baidu.com/share/link?shareid=158095877&uk=1982385223)
+
+
+
+（虚～～国外剽窃回来的-。-）

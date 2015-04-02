@@ -1,0 +1,86 @@
+---
+author: bccsafe
+comments: true
+date: 2013-12-28 15:35:24+00:00
+layout: post
+slug: delphi-%e4%bd%8e%e7%ba%a7%e9%94%ae%e7%9b%98%e9%92%a9%e5%ad%90
+title: delphi 低级键盘钩子
+wordpress_id: 431
+categories:
+- wp_Code[Delphi]
+tags:
+- 低级键盘钩子
+---
+
+最近老有人趁我不在的时候动我电脑，于是打算写了锁屏的程序出来，正好温习下钩子，一开始偷懒，打算用低级键盘/鼠标钩子，因为不用再写个Dll出来，可以直接在EXE里挂钩，但是缺点也很明显，ctrl+alt+del这样的组合键没办法屏蔽，把整理出来的源代码贴上
+
+``` delphi    
+//对照C语言的资料转换为delphi的格式
+  const WH_KEYBOARD_LL = 13;
+  type
+    PBDLLHOOKSTRUCT = ^TBDLLHOOKSTRUCT;
+    TBDLLHOOKSTRUCT = record
+    vkCode: DWORD;
+    scanCode: DWORD;
+    flags: DWORD;
+    time: DWORD;
+    dwExtraInfo: DWORD;
+  end;
+
+var
+  KeyBoardHook: HHOOK = 0;
+  MouseHook: HHook = 0;
+
+function KeyboardProc(nCode: Integer;
+  WParam: WPARAM;LParam: LPARAM):LRESULT; stdcall;
+begin
+  //屏蔽Alt+F4,Alt+Tab,Alt+Esc,左右WIN键
+  //ctrl+alt+del未屏蔽
+  if (nCode = HC_ACTION) then
+  begin
+    case wParam of
+    WM_KEYDOWN, WM_SYSKEYDOWN,
+    WM_KEYUP, WM_SYSKEYUP:
+    begin
+      if (PBDLLHOOKSTRUCT(lParam)^.vkCode = VK_LWIN) or
+      (PBDLLHOOKSTRUCT(lParam)^.vkCode = VK_RWIN) or
+      (PBDLLHOOKSTRUCT(lParam)^.vkCode = VK_TAB) or
+      (PBDLLHOOKSTRUCT(lParam)^.vkCode = VK_CONTROL) or
+      (PBDLLHOOKSTRUCT(lParam)^.vkCode = VK_Menu) or
+      (PBDLLHOOKSTRUCT(lParam)^.vkCode = VK_F4) or
+      (PBDLLHOOKSTRUCT(lParam)^.vkCode = VK_ESCAPE)
+      then
+      begin
+        result := 1;
+        exit;
+      end;
+      end;
+    end;
+  end;
+  result := CallNextHookEx(0, ncode, wparam, lparam);
+end;
+
+function MouseProc(nCode:Integer; WParam:WPARAM; LParam:LPARAM):LRESULT; stdcall;
+begin
+  //锁定鼠标
+  Result:=1;
+  if nCode<>0 then Result:= CallNextHookEx(0, nCode, WParam, LParam);
+end;
+
+procedure StartHook;
+begin
+  KeyBoardHook := SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, HInstance, 0);
+  MouseHook    := SetWindowsHookEx(WH_MOUSE_LL, MouseProc,HInstance,0);
+  if (KeyBoardHook = 0) or (MouseHook = 0) then halt;
+end;
+
+procedure EndHook;
+begin
+  if KeyBoardHook <> 0 then UnhookWindowsHookEx(KeyBoardHook);
+  if MouseHook <> 0 then UnhookWindowsHookEx(MouseHook);
+end;
+```
+
+
+
+

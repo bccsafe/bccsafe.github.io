@@ -1,0 +1,21 @@
+---
+author: bccsafe
+comments: true
+date: 2014-06-06 04:17:41+00:00
+layout: post
+slug: delphi-xe6%e7%a7%bb%e5%8a%a8%e5%bc%80%e5%8f%91%e6%89%8b%e5%86%8c
+title: delphi XE6移动开发手册
+wordpress_id: 534
+categories:
+- wp_杂谈
+---
+
+
+
+新书到手，有空了研究下哈
+
+临近期末事情好多
+
+[![delphi XE6移动开发手册](../../../../../public/Image/2014/06/QQ图片20140606114055.jpg)](../../../../../public/Image/2014/06/QQ图片20140606114055.jpg)
+
+

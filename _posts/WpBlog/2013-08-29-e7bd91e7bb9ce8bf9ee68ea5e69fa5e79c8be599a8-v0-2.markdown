@@ -1,0 +1,82 @@
+---
+author: bccsafe
+comments: true
+date: 2013-08-29 17:34:02+00:00
+layout: post
+slug: '%e7%bd%91%e7%bb%9c%e8%bf%9e%e6%8e%a5%e6%9f%a5%e7%9c%8b%e5%99%a8-v0-2'
+title: 网络连接查看器 V0.2
+wordpress_id: 324
+categories:
+- wp_My Work
+tags:
+- 经纬度
+- 网络连接
+---
+
+
+
+很久以前写过一款很基本的网络连接查看器
+
+详情见：[http://www.bccsafe.com/?p=27](http://www.bccsafe.com/?p=27)
+
+ 
+
+新版本在此基础上做了点改变
+
+添加了经纬度的查询，可以直接在地图上找到对方，当然有一定误差 
+
+IP-经纬度的数据库查询由ipinfodb提供 
+
+ 
+
+查询经纬度可以下载ipinfodb提供的数据库，也可以使用API查询
+
+前者速度快，但是精度低，是免费的版本
+
+而后者速度偏慢，数据比较准确，是商业版本
+
+我选择了后者。
+
+
+
+既然选择了通过网络来查询经纬度，那么归属地也就直接通过网络查询了
+
+老版本是带了一个纯真数据库，很占体积
+
+ 
+
+ 
+
+
+[![网络连接查看器 V0.2](../../../../../public/Image/2013/08/网络连接查看器-V0.2.jpg)](../../../../../public/Image/2013/08/网络连接查看器-V0.2.jpg)
+
+
+
+
+
+
+
+
+
+
+界面略重口味- -。。。。。 
+
+
+
+
+
+『注意：源代码中未提供API KEY
+
+前往http://ipinfodb.com/ip_location_api.php即可
+
+替换掉NetHelperFuncs中的YOUR KEY』
+
+
+
+源代码下载地址：
+
+[http://pan.baidu.com/share/link?shareid=1515584118&uk=1982385223](http://pan.baidu.com/share/link?shareid=1610008341&uk=1982385223)
+
+
+
+

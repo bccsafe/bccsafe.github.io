@@ -1,0 +1,51 @@
+---
+author: bccsafe
+comments: true
+date: 2013-07-02 08:57:34+00:00
+layout: post
+slug: delphi-%e5%88%a0%e9%99%a4%e5%8a%a8%e6%80%81%e6%95%b0%e7%bb%84%e6%8e%a7%e4%bb%b6
+title: Delphi 删除动态数组控件
+wordpress_id: 264
+categories:
+- wp_delphi学习笔记
+tags:
+- 删除动态数组控件
+---
+
+
+
+
+
+最近再开发一个非IE内核游览器
+
+自然要封装控件什么的
+
+在处理标签页关闭的时候碰到了这问题
+
+百度了下顺便把代码贴出来，方便后人-，-
+
+``` delphi    
+procedure FreeControl(var List: array of TControl; Index: Integer);
+var nMax: Integer;
+begin
+  nMax := High(List);
+  if(Index<0)or(Index>nMax)then Exit;
+  List[Index].Free;
+  Move(List[Index+1], List[Index], SizeOf(List[Index])*(nMax-Index));
+  SetLength(List, nMax);
+end;
+```
+
+
+
+注意了，函数参数中的声明需要修改  array of TControl
+
+别的版本未测试，D XE2 直接这样报错
+
+必须要 type xxx = Array of TControl;
+
+声明中改成var List: xxx;才可以
+
+
+
+

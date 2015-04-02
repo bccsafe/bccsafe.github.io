@@ -1,0 +1,28 @@
+---
+author: bccsafe
+comments: true
+date: 2014-06-11 14:07:53+00:00
+layout: post
+slug: dcef3-%e6%8c%87%e5%87%ba%e4%b8%80%e4%b8%aa%e5%9d%91
+title: dcef3 指出一个坑
+wordpress_id: 540
+categories:
+- wp_dcef3
+---
+
+dcef3提供了TChromium，可能会有人想用这个来开发游览器，可惜这个实现起来有问题，问题就出在OnBeforePopup事件上，在这里简单地做一个拦截然后让新的TChromium来加载这个新网页，这个方法是错的！
+这是一个大坑，我之前发布的游览器也是这样，get可能表面上还看不出什么问题，但万一是个post请求呢？
+  
+
+所以开发游览器最好的方法就是不要去用这个TChromium
+
+或者说凡是涉及到不是那种简单跳转网页的，都不要用TChromium
+
+自己参考dcef3写了一个类，成功地解决了这个问题
+
+</br>
+
+这个类就是后来的`TDcefbrowser` 
+
+PS: Blog搬家后加的这句
+

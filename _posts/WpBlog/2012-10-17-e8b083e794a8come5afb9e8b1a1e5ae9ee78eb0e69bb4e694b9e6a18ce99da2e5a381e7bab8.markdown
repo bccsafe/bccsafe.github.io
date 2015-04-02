@@ -1,0 +1,63 @@
+---
+author: bccsafe
+comments: true
+date: 2012-10-17 14:39:18+00:00
+layout: post
+slug: '%e8%b0%83%e7%94%a8com%e5%af%b9%e8%b1%a1%e5%ae%9e%e7%8e%b0%e6%9b%b4%e6%94%b9%e6%a1%8c%e9%9d%a2%e5%a3%81%e7%ba%b8'
+title: 调用COM对象实现更改桌面壁纸
+wordpress_id: 48
+categories:
+- wp_delphi学习笔记
+tags:
+- 更改桌面壁纸
+---
+
+
+
+整理自 [http://topic.csdn.net/u/20110827/10/eb3db3dd-9878-4a57-a64a-722228670dce.html](http://topic.csdn.net/u/20110827/10/eb3db3dd-9878-4a57-a64a-722228670dce.html)
+
+从前我也是调用SystemParametersInfo这API来修改桌面壁纸的，问题多多，也不知道哪错了 就没深究下去
+
+看了CSDN这帖子后 大彻大悟~~
+
+在XP下，SystemParametersInfo只支持BMP格式的图片，如果用其他格式的话就会黑屏？(我记得当年我就是这情况 现在懒得测试了)
+
+把这API的调用方法扔出来
+
+	SystemParametersInfo(SPI_SETDESKWALLPAPER,1,pointer(pchar('c:\a.bmp')),0);
+
+因为这API函数的局限性
+
+ID：[Forever_Young](http://my.csdn.net/Forever_Young) 提出了最佳的方法是调用COM对象
+
+具体实现代码  
+
+``` delphi   
+uses shlobj, ComObj;
+ 
+procedure SetWP(wp:string);
+var
+  hObj: IUnknown;
+  ADesktop: IActiveDesktop;
+begin
+  hObj := CreateComObject(CLSID_ActiveDesktop);
+  ADesktop := hObj as IActiveDesktop;
+  ADesktop.SetWallpaper(PWideChar(WideString(wp)), 0);
+  ADesktop.ApplyChanges(AD_APPLY_ALL or AD_APPLY_FORCE);?
+end;
+ 
+//调用方法
+//SetWP('C:\1.jpg');
+```
+
+注意：因为调用的是COM对象 那么就需要初始化COM库，如果没有引用类似 dialogs 那种单元的话  就需要手动调用`CoInitialize`然后退出时释放对象 
+
+``` delphi    
+uses ActiveX;
+ 
+initialization
+    CoInitialize(nil);
+ 
+finalization
+    CoUninitialize;
+```        

@@ -1,0 +1,51 @@
+---
+author: bccsafe
+comments: true
+date: 2012-11-12 13:24:11+00:00
+layout: post
+slug: '%e4%bb%8eindy9%e5%8d%87%e7%ba%a7%e5%88%b0indy10%e6%97%b6idtcpserver%e7%9a%84%e5%8f%98%e5%8c%96'
+title: 从Indy9升级到Indy10时IdTcpServer的变化
+wordpress_id: 81
+categories:
+- wp_delphi学习笔记
+tags:
+- Indy10
+---
+
+**从Indy9升级到Indy10时IdTcpServer的变化**
+
+代码移植到delphi xe2后 发现了很多问题 特别是indy控件升级导致的一系列问题
+
+因为不向下兼容 代码基本要重新修改 于是百度了点资料 顺便贴出来
+
+>	首先Indy9.18中的TcpServer在Indy10中被分割成了2个组件：TIdCmdTCPServer和TIdTCPServer。其中TIdCmdTCPServer是原来的TIdTCPServer，新的TIdTCPServer单独分出来了。 
+
+>	再者所以的原始的reads和writes包括Read, ReadLn, Write, WriteLn等现在变成IOHandler的属性而不是TCPConnection的。按照官方的文档，这样做的原因一方面是为了将原始的I/O操作隔离开来，另一方面是为了便于实现多态。 
+
+>	第三就是控件中各事件的标识由“AThread: TIdPeerThread” 变成了“AContext: TIdContext”。在9中一个事件是在线程中执行的，每个连接都有单独的线程。而在10中则不同，同一个连接在不同的时候可能使用不同的线程。就是把连接和线程分离了，这样能在连接过多的时候减少占用的资源和避免由线程切换带来的开销。连接信息的的存储位置也就不同，在9中存在AThread.Data里，在10中存在TIdContext.Data里。 
+
+>	第四是 9中线程管理ThreadMgr变成了10中的调度管理Scheduler。这样既能像原来那样进行线程管理，也能对SuperCore中的调度纤程管理。 
+
+>	上面就是在官方文档中描述的变化，还有SSL的变化，因为本例中没用到，就不说了。下面从代码上说说具体的变化。 
+
+>	用CodeGear打开delphi的代码，会提示下列错误： 
+
+>	 “Error reading IdTcpServer1.CommandHandlers” 
+
+>	 “Error reading IdTcpServer1.Greeting.NumericCode” 
+ 
+>	 “Error reading IdTcpServer1.MaxConnectionReply.NumericCode” 
+
+>	 “Error reading IdTcpServer1.ReplyExceptionCode"
+
+ 
+>	 全部忽略，然后升级下列代码：
+ 
+ 
+>	1、将IdThreadMgrPool替换为IdSchedulerOfThreadPool1****组件，并将IdTcpServer1的Scheduler属性改成IdSchedulerOfThreadPool1****。
+ 
+ 
+>	2、将AThread : TIdPeerThread相关的全部代码改成AContext: TIdContext，并将Connection.下的相关I/O方法替换成Connection.IOHandler.的方法。 
+ 
+>	3、也是比较麻烦的，程序中需要定位每一个连接，在Indy9中是用AThread.ThreadID定位每一个连接的。因为9种连接和线程是一一对应的，可以用线程ID定位连接。但在indy10种AContext:和线程不再对应，所以改为采用客户端发来的硬件序列号来确定，将序列号信息存在AContext:.data中。因为程序中有许多部分都与此有关，所以修改起来挺麻烦的。
+ 
