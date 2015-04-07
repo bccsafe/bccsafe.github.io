@@ -9,7 +9,8 @@ title: 文章归档
 <h2>{{ category | first }}({{ category | last | size }})</h2> 
 <ul>
     {% for post in category.last %}
-        <li>{{ post.date | date:"%Y/%m/%d"}}	<a href="{{ post.url }}">{{ post.title }}</a></li>
+        <li>{{ post.date | date:"%Y/%m/%d"}}	      
+        <a href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
