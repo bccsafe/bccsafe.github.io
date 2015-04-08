@@ -8,6 +8,9 @@ markdown:            redcarpet
 permalink:           pretty
 relative_permalinks: true
 
+gems:
+  - jekyll-sitemap
+
 # Setup
 title:               BccSafe's Blog
 tagline:             'Fight for a future'
