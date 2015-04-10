@@ -20,7 +20,7 @@ BccBrowser界面截图
 
 * TDcefBrowser 链接 [http://www.bccsafe.com/?p=579](http://www.bccsafe.com/?p=579)
 
-* 下载地址： [http://pan.baidu.com/s/1dbjVS](http://pan.baidu.com/s/1dbjVS)
+* 下载地址： [http://pan.baidu.com/s/1gd7wfHx](http://pan.baidu.com/s/1gd7wfHx)
 
 * QQ 1262807955
 
