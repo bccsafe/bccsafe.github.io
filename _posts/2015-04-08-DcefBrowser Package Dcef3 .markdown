@@ -18,12 +18,12 @@ categories:
 
 ### 导航：
 	
-1. [DcefBrowser简介](http://www.bccsafe.com/dcefbrowser/2015/04/06/DcefBrowser简介markdown/)
+1. [DcefBrowser简介](http://www.bccsafe.com/dcefbrowser/2015/04/06/DcefBrowser Introduce/)
 	
-2. [DcefBrowser详细介绍](http://www.bccsafe.com/dcefbrowser/2015/04/11/DcefBrowser详细介绍/)
+2. [DcefBrowser详细介绍](http://www.bccsafe.com/dcefbrowser/2015/04/11/DcefBrowser more introduce/)
 	
-3. [DcefBrowser疑难问题](http://www.bccsafe.com/dcefbrowser/2015/04/11/DcefBrowser疑难问题/)
+3. [DcefBrowser疑难问题](http://www.bccsafe.com/dcefbrowser/2015/04/11/DcefBrowser qst/)
 
-4. [DcefBrowser与JS交互](http://www.bccsafe.com/2015/04/11/DcefBrowser与JS交互/)
+4. [DcefBrowser与JS交互](http://www.bccsafe.com/2015/04/11/DcefBrowser JS/)
 <span id = "Navigation5"></span>
-5. [使用TDcefBrowser + TChromeTabs开发浏览器](http://www.bccsafe.com/dcefbrowser/2015/04/10/BccBrowser%20%20V2.0%20Chromium内核的多进程游览器/)
+5. [使用TDcefBrowser + TChromeTabs开发浏览器](http://www.bccsafe.com/dcefbrowser/2015/04/10/BccBrowser  V2.0 Chromium browser/)
