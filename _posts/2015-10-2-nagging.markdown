@@ -1,0 +1,18 @@
+---
+layout: post
+title: 近期碎碎念
+categories:
+- others
+---
+
+好久没更新blog了，随着年龄的增长，空闲时间也是越来越少
+
+准备转向java的怀抱了，但不会忘记delphi的哈，Windows桌面应用开发还是首选，DcefBrowser我也会持续的维护下去
+
+前段时间完成了公司一套性能监控的后台，顺便来晒下成果 :)
+
+[![MonitorPer](../../../../../public/Image/2015/10/MonitorPer.png)](../../../../../public/Image/2015/10/MonitorPer.png)
+
+[![ViewPerRecord](../../../../../public/Image/2015/10/ViewPerRecord.png)](../../../../../public/Image/2015/10/ViewPerRecord.png)
+
+假期有时间我会整理具体细节然后分享出来
