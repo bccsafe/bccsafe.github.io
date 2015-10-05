@@ -1,0 +1,23 @@
+---
+layout: post
+title: 通过PDH获取所有Cpu使用率
+categories:
+- delphi笔记
+---
+
+通过`Performance Data Helper`获取系统所有Cpu使用率，delphi实现
+
+>性能监视，是Windows NT提供的一种系统功能。Windows NT一直以来总是集成了性能监视工具，它提供有关操作系统当前运行状况的信息，针对各种对象提供了数百个性能计数器。性能对象，就是被监视的对象，典型例子有Processor、Process、Memory、TCP/UDP/IP/ICMP、PhysicalDisk等。计数器通常提供操作系统、应用程序、服务、驱动程序等的性能相关信息，以此来分析系统瓶颈和对系统及应用程序性能进行诊断和调优。性能计数器机制让应用程序和操作系统组件可以向性能监视应用程序，比如性能监视器(Performance Monitor)，报告一些与性能有关的统计信息。PerfMon.exe中可以查看性能对象、性能计数器和对象实例，可通过添加计数器来查看相关描述信息。
+
+需要JEDI API Library支持，<a href="http://sourceforge.net/projects/jedi-apilib/" target="_blank">下载地址</a>
+
+```delphi
+unit CpuUsageUtils;interface(*  获取系统各个Cpu使用率单元  Unit owner: BccSafe  blog: http://www.bccsafe.com/*)uses  Windows, Messages, SysUtils,  // JEDI API Library Support  JwaPdh, JwaPdhMsg;type  TCounter = record    Path: String;    Handle: Cardinal;  end;  TCpuUsage = record  private    FQuery: PDH_HQUERY;    FCounters: array of TCounter;    FIsInit: Boolean;    procedure Init_GetCpuUsage;  public    class function Create: TCpuUsage; static;    procedure Init;    procedure Close;    function Current(var aCpuUsage: Integer;      var aAllCpuUsageArr: TArray<Integer>): Boolean; overload;    function Current: Integer overload;  end;var  CpuUsage: TCpuUsage;implementation{ TCpuUsage }class function TCpuUsage.Create: TCpuUsage;begin  Result.FQuery := 0;  Result.FIsInit := False;end;procedure TCpuUsage.Close;begin  if FQuery <> 0 then    PdhCloseQuery(FQuery);end;procedure TCpuUsage.Init;begin  if Not FIsInit then  begin    Current;    FIsInit := True;  end;end;procedure TCpuUsage.Init_GetCpuUsage;var  dwSize: Cardinal;  h: PDH_HQUERY;  szDataSource: String;  cnt: Integer;  i: Integer;  pPaths: PChar;  pIterator: PChar;  InstanceId: String;  CounterPath: String;  Status: PDH_STATUS;begin  szDataSource := '\Processor(*/*)\% Processor Time';  if PdhOpenQuery(nil, 0, FQuery) <> ERROR_SUCCESS then    exit;  dwSize := 0;  pPaths := nil;  Status := PdhExpandWildCardPath(nil, PChar(szDataSource), pPaths, dwSize, 0);  if Status = PDH_MORE_DATA then  begin    dwSize := dwSize + 1;    pPaths := GetMemory(dwSize);    Status := PdhExpandWildCardPath(nil, PChar(szDataSource), pPaths,      dwSize, 0);    if Status = ERROR_SUCCESS then    begin      cnt := 0;      pIterator := pPaths;      while (strlen(pIterator) > 0) do      begin        CounterPath := pIterator;        i := Pos('(', CounterPath);        InstanceId := Copy(CounterPath, i + 1, Pos(')', CounterPath) - i - 1);        Status := PdhAddCounter(FQuery, PChar(CounterPath), 0, h);        if Status = ERROR_SUCCESS then        begin          SetLength(FCounters, cnt + 1);          with FCounters[cnt] do          begin            Path := CounterPath;            Handle := h;          end;          inc(cnt);        end;        pIterator := pIterator + Length(pIterator) + 1;      end;    end;    if pPaths <> nil then      FreeMem(pPaths);  end;end;function TCpuUsage.Current(var aCpuUsage: Integer;  var aAllCpuUsageArr: TArray<Integer>): Boolean;var  i: Integer;  counterType: PDword;  pValue: _PDH_FMT_COUNTERVALUE;  Status: Cardinal;begin  Result := False;  aCpuUsage := 0;  SetLength(aAllCpuUsageArr, 0);  if Not FIsInit then  begin    Init_GetCpuUsage;    FIsInit := True;  end;  if FQuery = 0 then    exit;  PdhCollectQueryData(FQuery);  for i := 0 to Length(FCounters) - 1 do  begin    counterType := nil;    Status := PdhGetFormattedCounterValue(FCounters[i].Handle, PDH_FMT_DOUBLE,      counterType, pValue);    if Status = ERROR_SUCCESS then    begin      if i = Length(FCounters) - 2 then        aCpuUsage := Round(pValue.doubleValue)      else      begin        SetLength(aAllCpuUsageArr, Length(aAllCpuUsageArr) + 1);        aAllCpuUsageArr[High(aAllCpuUsageArr)] := Round(pValue.doubleValue);      end;    end;  end;  Result := (aCpuUsage <> 0) and (High(aAllCpuUsageArr) > -1)end;function TCpuUsage.Current: Integer;var  aCpuUsage: Integer;  aAllCpuUsageArr: TArray<Integer>;begin  if Current(aCpuUsage, aAllCpuUsageArr) then    Result := aCpuUsage  else    Result := 0;end;initializationCpuUsage.Init;finalizationCpuUsage.Close;end.
+```
+
+调用方法如下：
+
+```delphi
+procedure TForm1.Timer1Timer(Sender: TObject);var  Index, aCpuUsage: Integer;  aAllCpuUsageArr: TArray<Integer>;  OutputStr: string;begin  CpuUsage.Current(aCpuUsage, aAllCpuUsageArr);  OutputStr := Format('TotalCpuUsage: %d,', [aCpuUsage]);  for Index := Low(aAllCpuUsageArr) to High(aAllCpuUsageArr) do    OutputStr := OutputStr + Format(' Cpu%d: %d',      [Index, aAllCpuUsageArr[Index]]);  Memo1.Lines.Add(OutputStr);end;
+```
+
