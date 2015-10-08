@@ -13,6 +13,5 @@ title: About
 * 苦逼大学生
 
 ##Learning
-* C++ 11
-* Go
-* Vim
+* J2EE
+* Delphi
