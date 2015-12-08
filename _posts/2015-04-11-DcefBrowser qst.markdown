@@ -27,6 +27,7 @@ categories:
     const commandLine: ICefCommandLine);
     begin
       commandLine.AppendSwitch('enable-media-stream'); 
+      commandLine.AppendSwitch('enable-usermedia-screen-capturing'); 
     end;
     
     CefOnBeforeCommandLineProcessing := OnbeforeCmdLine;
