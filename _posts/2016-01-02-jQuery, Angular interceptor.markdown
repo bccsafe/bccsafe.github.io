@@ -1,11 +1,13 @@
 ---
 layout: post
-title: POST请求 request payload 转 form data
+title: jQuery, Angular ajax拦截器
 categories:
 - 前端笔记
 ---
 
 后端方面用了token验证，每个请求的header里都要求加上token
+
+请求上也要将request payload 转为 form data
 
 前端项目里主要用到了Angular, 少部分用了jQuery
 
