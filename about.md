@@ -13,5 +13,6 @@ title: About
 * 苦逼大学生
 
 ##Learning
-* J2EE
+* 前端
 * Delphi
+* J2EE

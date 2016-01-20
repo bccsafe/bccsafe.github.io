@@ -18,6 +18,9 @@ categories:
 * `gulp-jshint` js代码检查
 * `run-sequence` 顺序执行task  
 
+如果需要更多gulp插件的话，可以去[这里](https://github.com/Platform-CUF/use-gulp)逛逛有没有可用的，有人整理好了一份
+
+
 ---
 
 
