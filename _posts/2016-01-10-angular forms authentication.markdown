@@ -73,7 +73,8 @@ app.controller('controller', function ($scope) {
 })
 ```  
 	
-<a href="http://plnkr.co/edit/SYMpQP?p=info" target="_blank">演示地址</a> 	
+<a href="http://plnkr.co/edit/SYMpQP?p=info" target="_blank">演示地址</a> 
+	
 * 自定义验证 - 对比两个input值是否相等 
 	
 ```html
