@@ -5,7 +5,7 @@ categories:
 - DcefBrowser 
 ---
 
-##使用注意事项
+## 使用注意事项
 
 dcef3是多进程架构(CefSingleProgress := False)，而DcefBrowser是对dcef3的再次封装，因此很多下面所提到的注意事项也同样适用于dcef3
 	
@@ -40,7 +40,7 @@ dcef3是多进程架构(CefSingleProgress := False)，而DcefBrowser是对dcef3�
 4. TBrowserPage 有PageIndex和PageID两个属性，在不变动TAB顺序的情况下PageIndex=PageID，当你自己管理TAB页的时候，访问Page的正确方式应该是TDcefBrowser.GetPageByID  
 5. 不管是拖控件或是动态创建的，需要在TForm.Destory事件中释放TDcefBrowser
 
-##设置介绍
+## 设置介绍
 
 ### 1)dcef3相关设置
 

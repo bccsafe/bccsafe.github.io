@@ -5,7 +5,7 @@ categories:
 - DcefBrowser
 ---
 
-##黑屏问题
+## 黑屏问题
 
 因为部分集成显卡版本太老或是不支持，导致webkit渲染失败，手动添加参数，关闭硬件渲染
 
@@ -18,7 +18,7 @@ categories:
      
     CefOnBeforeCommandLineProcessing := OnbeforeCmdLine;
     
-##如何让DcefBrowser支持摄像头
+## 如何让DcefBrowser支持摄像头
 
 当前版本需要手动添加参数，可能以后dcef3会提供接口甚至回调事件
 
@@ -32,7 +32,7 @@ categories:
     
     CefOnBeforeCommandLineProcessing := OnbeforeCmdLine;
 
-##如何让DcefBrowser支持Flash
+## 如何让DcefBrowser支持Flash
 
 需要用到pepperflash插件，由于git上不能上传这类文件，还有版权问题，就未添加到TDcefBrowser里
 
@@ -46,7 +46,7 @@ categories:
         'PepperFlash\pepflashplayer.dll');
       CefRefreshWebPlugins();
 
-##解决语言环境问题
+## 解决语言环境问题
 
 
 单纯的设置CefLocale := 'zh-CN'有时并不能解决问题，JS获取的navigator.language的确为zh-CN，但很多网页通过HTTP_ACCEPT_LANGUAGE来判断语言，例如QQ邮箱，因此我们需要在OnBeforeResourceLoad事件中做相应的设置
