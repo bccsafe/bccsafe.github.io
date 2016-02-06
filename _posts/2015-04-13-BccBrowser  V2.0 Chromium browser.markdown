@@ -18,7 +18,7 @@ BccBrowser界面截图
  
 源代码我就不发出来了，请原谅我的自私，想了想还是决定留点底子，TDcefBrowser已经开源并提供了DEMO，相信开发起来问题并不大
 
-* TDcefBrowser 链接 [http://www.bccsafe.com/dcefbrowser/2015/04/08/DcefBrowser%20Package%20Dcef3%20/](http://www.bccsafe.com/dcefbrowser/2015/04/08/DcefBrowser%20Package%20Dcef3%20/)
+* [TDcefBrowser 链接](../../../../2015/04/08/DcefBrowser-Package-Dcef3/)
 
 * 下载地址： [http://pan.baidu.com/s/1o6GEIYA](http://pan.baidu.com/s/1o6GEIYA)
 
