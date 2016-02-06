@@ -42,6 +42,7 @@ categories:
 	需要用到angular-messages.js, module中引用`ngMessages`这个模块
 	
 	账号名必须输入，长度最长10位
+
 	
 ```html
 <form name="myForm" ng-submit="doSubmit(myForm.$valid)" novalidate>
@@ -74,6 +75,7 @@ app.controller('controller', function ($scope) {
 ```
 
 * 自定义验证 - 对比两个input值是否相等 <a href="http://plnkr.co/edit/vQK3JS?p=info" target="_blank">演示地址</a>
+
 	
 ```html
 <form name="myForm" ng-submit="doSubmit(myForm.$valid)" novalidate>
@@ -128,7 +130,8 @@ app.controller('controller', function ($scope) {
 })
 ```
 
-* 自定义验证 - ajax后台验证是否重名 <a href="http://plnkr.co/edit/LCAaka?p=info" target="_blank">演示地址</a> 
+* 自定义验证 - ajax后台验证是否重名 <a href="http://plnkr.co/edit/LCAaka?p=info" target="_blank">演示地址</a>
+
 
 ```html	
 <form name="myForm" ng-submit="doSubmit(myForm.$valid)" novalidate>
