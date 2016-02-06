@@ -7,12 +7,12 @@ title: About
  
 ---
 
-##The Role
+## The Role
 * 年轻的Coder
 * 半吊子网络安全爱好者
 * 苦逼大学生
 
-##Learning
+## Learning
 * 前端
 * Delphi
 * J2EE
