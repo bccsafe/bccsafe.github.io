@@ -37,7 +37,7 @@ categories:
 
 	form标签上加上`novalidate`属性，可以禁用浏览器自带的验证功能，改用Angular的
 	
-* 配合ng-message实现实时错误提示
+* 配合ng-message实现实时错误提示 <a href="http://plnkr.co/edit/SYMpQP?p=info" target="_blank">演示地址</a>
 
 	需要用到angular-messages.js, module中引用`ngMessages`这个模块
 	
@@ -71,11 +71,9 @@ app.controller('controller', function ($scope) {
  
 	}
 })
-```  
-	
-<a href="http://plnkr.co/edit/SYMpQP?p=info" target="_blank">演示地址</a> 
-	
-* 自定义验证 - 对比两个input值是否相等 
+```
+
+* 自定义验证 - 对比两个input值是否相等 <a href="http://plnkr.co/edit/vQK3JS?p=info" target="_blank">演示地址</a>
 	
 ```html
 <form name="myForm" ng-submit="doSubmit(myForm.$valid)" novalidate>
@@ -128,12 +126,9 @@ app.controller('controller', function ($scope) {
  
 	}
 })
-``` 
-	
-<a href="http://plnkr.co/edit/vQK3JS?p=info" target="_blank">演示地址</a> 
-	
-* 自定义验证 - ajax后台验证是否重名
+```
 
+* 自定义验证 - ajax后台验证是否重名 <a href="http://plnkr.co/edit/LCAaka?p=info" target="_blank">演示地址</a> 
 
 ```html	
 <form name="myForm" ng-submit="doSubmit(myForm.$valid)" novalidate>
@@ -175,7 +170,4 @@ app.controller('controller', function ($scope) {
 	}
 })
 ```
-	
-<a href="http://plnkr.co/edit/LCAaka?p=info" target="_blank">演示地址</a>  
-
 
