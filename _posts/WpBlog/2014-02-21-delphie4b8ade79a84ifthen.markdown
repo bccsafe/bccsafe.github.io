@@ -34,8 +34,6 @@ function IfThen(AValue: Boolean; const ATrue: string; AFalse: string = ''): stri
 
 
 
-`注意了D7下是没有的`
-
 
 
 
