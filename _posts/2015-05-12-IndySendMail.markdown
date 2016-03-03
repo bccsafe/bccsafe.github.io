@@ -2,7 +2,7 @@
 layout: post
 title: delphi实现smtp发送邮件
 categories:
-- delphi笔记
+- delphi
 ---
 
 原先使用了第三方插件`EASendMail SMTP Component`来实现发送邮件，谁知道授权过期了，无奈只好求助于Indy，Google上翻阅了相关资料一番，发现现成的代码并不能满足我的需求，就在原基础上加以修改，添加了HTML格式化和添加附件接口。

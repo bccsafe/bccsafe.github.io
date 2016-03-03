@@ -2,7 +2,7 @@
 layout: post
 title: Mybatis3 判断字符串
 categories:
-- J2EE笔记
+- J2EE
 ---
 
 在使用Mybatis3过程中发现一个奇怪的问题，判断字符串必须要用指定的格式

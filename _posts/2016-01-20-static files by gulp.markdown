@@ -2,7 +2,7 @@
 layout: post
 title: gulp压缩合并静态文件
 categories:
-- 前端笔记
+- Web Developer
 ---
 
 项目中用了Angular，分成多个模块后js文件也越来越多，访问一次会产生大量的请求，选择使用gulp来完成压缩合并静态文件，在这个过程中遇到了很多问题，在这里记录下来

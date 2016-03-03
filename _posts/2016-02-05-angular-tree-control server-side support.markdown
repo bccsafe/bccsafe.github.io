@@ -2,7 +2,7 @@
 layout: post
 title: 为angular-tree-control添加server-side功能
 categories:
-- 前端笔记
+- Web Developer
 ---
 
 ### angular-tree-control

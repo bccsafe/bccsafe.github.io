@@ -2,7 +2,7 @@
 layout: post
 title: jQuery, Angular ajax拦截器
 categories:
-- 前端笔记
+- Web Developer
 ---
 
 后端方面用了token验证，每个请求的header里都要求加上token

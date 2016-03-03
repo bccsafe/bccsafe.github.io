@@ -2,7 +2,7 @@
 layout: post
 title: Angular表单验证
 categories:
-- 前端笔记
+- Web Developer
 ---
 
 接触Angular不久，项目中很多需要提交表单，google了些资料，在这里记录下来
