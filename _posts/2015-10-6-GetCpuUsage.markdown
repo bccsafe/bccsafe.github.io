@@ -2,7 +2,7 @@
 layout: post
 title: 通过PDH获取所有Cpu使用率
 categories:
-- delphi
+- Delphi
 ---
 
 通过`Performance Data Helper`获取系统所有Cpu使用率，delphi实现

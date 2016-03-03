@@ -2,7 +2,7 @@
 layout: post
 title: 通过IPHelper API获取系统上传/下载流量
 categories:
-- delphi
+- Delphi
 ---
 
 通过IPHelper API获取系统上传/下载流量，delphi实现

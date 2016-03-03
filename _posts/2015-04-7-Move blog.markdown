@@ -2,7 +2,7 @@
 layout: post
 title: Blog搬家
 categories:
-- others
+- Others
 ---
 
 很久之前就计划着给Blog换个窝了，一直没能如愿，这次终于是下定决心了，从`虚拟主机 + WordPress` 换到了 `Github + jekyll`，总结下让我心动的因素

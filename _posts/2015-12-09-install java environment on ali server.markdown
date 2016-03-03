@@ -2,7 +2,7 @@
 layout: post
 title: 阿里云上安装java环境
 categories:
-- mess
+- Mess
 ---
 
 最近因为项目需要，需要台服务器，新浪SAE限制好多，还有点学习成本，就考虑尝试下阿里云

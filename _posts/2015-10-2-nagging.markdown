@@ -2,7 +2,7 @@
 layout: post
 title: 近期碎碎念
 categories:
-- others
+- Others
 ---
 
 好久没更新blog了，随着年龄的增长，空闲时间也是越来越少
