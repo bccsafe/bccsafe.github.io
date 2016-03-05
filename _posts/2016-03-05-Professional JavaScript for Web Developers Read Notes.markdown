@@ -20,6 +20,7 @@ categories:
 > ##### P72
 > 
 > typeof 操作符是确定一个变量是字符串、数值、布尔值，还是 undefined 的最佳工具 
+> 
 > ``` JavaScript
 > var s = "Nicholas";
 > var b = true;
@@ -36,6 +37,7 @@ categories:
 > ```
 > 
 > 但在检测引用类型的值时，这个操作符的用处不大。通常，我们并不是想知道某个值是对象，而是想知道它是什么类型的对象。为此，ECMAScript提供了 instanceof 操作符
+> 
 > ``` JavaScript
 > alert(person instanceof Object); // 变量 person 是 Object 吗？
 > alert(colors instanceof Array); // 变量 colors 是 Array 吗？
@@ -75,6 +77,7 @@ categories:
 > * `forEach` 对数组中的每一项运行给定函数。这个方法没有返回值。
 > * `map` 对数组中的每一项运行给定函数，返回每次函数调用的结果组成的数组。
 > * `some ` 对数组中的每一项运行给定函数，如果该函数对任一项返回 true，则返回 true。
+> 
 > ```JavaScript
 > var numbers = [1,2,3,4,5,4,3,2,1];
 > var everyResult = numbers.every(function(item, index, array){
@@ -98,6 +101,7 @@ categories:
 > * `reduce` 迭代数组的所有项，然后构建一个最终返回的值。从数组的第一项开始，逐个遍历
 到最后。
 > * `reduceRight` 迭代数组的所有项，然后构建一个最终返回的值。从数组的最后一项开始，向前遍历到第一项。
+> 
 > ```JavaScript
 > var values = [1,2,3,4,5];
 > var sum = values.reduce(function(prev, cur, index, array){
