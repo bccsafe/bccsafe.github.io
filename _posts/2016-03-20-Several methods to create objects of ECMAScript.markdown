@@ -49,15 +49,13 @@ PS 读完这一章真的熟悉颇多，之前自己编写工具类的时候就�
 * 动态原型模式
 
 > ``` JavaScript
-> function Person(name, age, job){
-> 		//属性> 		this.name = name;> 		this.age = age;> 		this.job = job;
-> 		//方法
-> 		if (typeof this.sayName != "function"){
-> 			Person.prototype.sayName = function(){
-> 				alert(this.name);
-> 			}; 
-> 		}￼￼> }￼￼> var friend = new Person("Nicholas", 29, "Software Engineer");
-￼￼> friend.sayName();
+> function Person(name, age, job){ 		> 	this.name = name;> 	this.age = age;> 	this.job = job;
+> 	if (typeof this.sayName != "function"){
+> 		Person.prototype.sayName = function(){
+> 			alert(this.name);
+> 		}; 
+> 	}> }> var friend = new Person("Nicholas", 29, "Software Engineer");
+> friend.sayName();
 > ```
 
 * 寄生构造函数模式
@@ -77,7 +75,7 @@ PS 读完这一章真的熟悉颇多，之前自己编写工具类的时候就�
 
 ### 优缺点
 
-/ | 对象识别(constructor) | 多个实例共享同一个function | function不在全局作用域，具有封装性 | 构造函数能传递初始化参数 | 多个实例有各自的属性，不共享
+/ | 对象识别(instanceof) | 多个实例共享同一个function | function不在全局作用域，具有封装性 | 构造函数能传递初始化参数 | 多个实例有各自的属性，不共享
 ------------ | ------------- | ------------
 工厂模式 | No  | No | Yes | Yes | Yes |
 构造函数模式 | Yes  | Yes | No | Yes | Yes |
