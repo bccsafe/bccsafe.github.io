@@ -7,9 +7,9 @@ categories:
 
 关键字：`AngularJs1`, `ES6`, `SASS`, `Webpack`, `hot module replacement`
 
-### 一.AngularJs ES6写法
+## 一.AngularJs ES6写法
 
-#### 路由
+### 路由
 
 ```javascript
 //routing.js
@@ -29,12 +29,37 @@ export default function routing($stateProvider) {
 import 'angular';
 import angularUIRouter from 'angular-ui-router';
 import routing from './config/routing.js';
-import testModule from './module/test/index.js';
 
-let myApp = angular.module("myApp", [angularUIRouter, testModule]);
+let myApp = angular.module("myApp", [angularUIRouter]);
 
 myApp.config(routing);
 ```
+
+### Controller
+
+```javascript
+//TestController.js
+class TestController {
+
+    constructor($rootScope, $scope, $stateParams){
+        'ngInject';
+
+        $scope.testValue = "this value from the Class TestController"; 
+    }
+
+}
+
+export default TestController;
+
+//index.js
+import 'angular';
+import angularUIRouter from 'angular-ui-router';
+let testModule = angular.module('testModule', [angularUIRouter]);
+
+export default testModule = testModule.name;
+```
+
+
 	
 
 
