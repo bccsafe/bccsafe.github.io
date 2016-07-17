@@ -199,6 +199,8 @@ if (process.env.NODE_ENV === 'production') {
 
 > Webpack提供了一个基于Node.js Express框架的开发服务器，它是一个静态资源Web服务器，对于简单静态页面或者仅依赖于独立服务的前端页面，都可以直接使用这个开发服务器进行开发。在开发过程中，开发服务器会监听每一个文件的变化，进行实时打包，并且可以推送通知前端页面代码发生了变化，从而可以实现页面的自动刷新。
 
+对HTML, Es6, SCSS文件的更改将可以不需要刷新自动更新，这点很爽
+
 ```javascript
 gulp.task('server', ['set-dev-node-env', 'webpack', 'myWatch'], (callback) => {
 	var myConfig = Object.create(webpackConfig);
@@ -219,5 +221,5 @@ gulp.task('server', ['set-dev-node-env', 'webpack', 'myWatch'], (callback) => {
 });
 ```
 
-对HTML, Es6, SCSS文件的更改将可以不需要刷新自动更新
+#### <a target="value" href="https://github.com/bccsafe/AngularJs1-ES6-Webpack">查看完整代码</a>
 
