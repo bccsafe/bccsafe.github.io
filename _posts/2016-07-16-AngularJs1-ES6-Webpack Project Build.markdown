@@ -5,6 +5,8 @@ categories:
 - Web Developer
 ---
 
+<p style="color: red">这份代码存在多个问题，Angular 1.x和webpack结合存在很多问题，暂时放弃...</p>
+
 关键字：`AngularJs1`, `ES6`, `SASS`, `gulp`, `Webpack`, `livereload`
 
 ## 一. 项目目录
